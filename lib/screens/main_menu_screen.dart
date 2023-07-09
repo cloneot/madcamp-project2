@@ -32,7 +32,7 @@ class MainMenuScreen extends StatelessWidget {
             ),
             IconButton(
               onPressed: () => joinRoom(context),
-              icon: const Icon(Icons.sensor_door_outlined),
+              icon: const Icon(Icons.search_rounded),
             ),
             IconButton(
               onPressed: () => userInfo(context),

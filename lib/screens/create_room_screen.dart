@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:madcamp_project2/widgets/create_room_form.dart';
 
 class CreateRoomScreen extends StatefulWidget {
   static String routeName = '/create_room';
@@ -27,8 +28,9 @@ class _CreateRoomScreenState extends State<CreateRoomScreen> {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      body: Center(
-        child: Text("Create Room Screen"),
+      body: Padding(
+        padding: EdgeInsets.all(20),
+        child: CreateRoomForm(),
       ),
     );
   }
