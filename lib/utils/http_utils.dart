@@ -76,7 +76,6 @@ class HttpUtil {
       options: requestOptions,
       // cancelToken: cancelToken,
     );
-
     return response.data;
   }
 }

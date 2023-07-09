@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:madcamp_project2/models/users.dart';
 import 'package:madcamp_project2/utils/http_utils.dart';
 
 class UsreInfoScreen extends StatefulWidget {
@@ -54,6 +55,9 @@ class _UsreInfoScreenState extends State<UsreInfoScreen> {
                   // var response = await dio.get('http://localhost:80/test');
                   var response =
                       await HttpUtil().get('/users/${myController.text}');
+                  Users user = Users.fromMap(response);
+                  print(user.username);
+                  print(user.totalGames);
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(response.toString()),
