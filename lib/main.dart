@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:madcamp_project2/screens/login_screen.dart';
 import 'package:madcamp_project2/screens/game_screen.dart';
 import 'package:madcamp_project2/screens/main_menu_screen.dart';
 import 'package:madcamp_project2/screens/create_room_screen.dart';
@@ -17,6 +18,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       routes: {
+        LoginScreen.routeName: (context) => const LoginScreen(),
         MainMenuScreen.routeName: (context) => const MainMenuScreen(),
         CreateRoomScreen.routeName: (context) => const CreateRoomScreen(),
         JoinRoomScreen.routeName: (context) => const JoinRoomScreen(),

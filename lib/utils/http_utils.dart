@@ -48,11 +48,35 @@ class HttpUtil {
     return response.data;
   }
 
-  // Map<String, dynamic>? getAuthorizationHeader() {
-  //   var headers = <String, dynamic>{};
-  //   if (Get.isRegistered<UserStore>() && UserStore.to.hasToken == true) {
-  //     headers['Authorization'] = 'Bearer ${UserStore.to.token}';
-  //   }
-  //   return headers;
-  // }
+  Map<String, dynamic>? getAuthorizationHeader() {
+    // var headers = <String, dynamic>{};
+    // if (Get.isRegistered<UserStore>() && UserStore.to.hasToken == true) {
+    //   headers['Authorization'] = 'Bearer ${UserStore.to.token}';
+    // }
+    // return headers;
+    return null;
+  }
+
+  Future post(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+  }) async {
+    Options requestOptions = options ?? Options();
+    requestOptions.headers = requestOptions.headers ?? {};
+    Map<String, dynamic>? authorization = getAuthorizationHeader();
+    if (authorization != null) {
+      requestOptions.headers!.addAll(authorization);
+    }
+    var response = await dio.post(
+      path,
+      data: data,
+      queryParameters: queryParameters,
+      options: requestOptions,
+      // cancelToken: cancelToken,
+    );
+
+    return response.data;
+  }
 }
