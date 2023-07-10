@@ -65,11 +65,32 @@ class HttpUtil {
   }) async {
     Options requestOptions = options ?? Options();
     requestOptions.headers = requestOptions.headers ?? {};
-    Map<String, dynamic>? authorization = getAuthorizationHeader();
-    if (authorization != null) {
-      requestOptions.headers!.addAll(authorization);
-    }
+    // Map<String, dynamic>? authorization = getAuthorizationHeader();
+    // if (authorization != null) {
+    //   requestOptions.headers!.addAll(authorization);
+    // }
     var response = await dio.post(
+      path,
+      data: data,
+      queryParameters: queryParameters,
+      options: requestOptions,
+      // cancelToken: cancelToken,
+    );
+    return response.data;
+  }
+
+  Future put(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+  }) async {
+    Options requestOptions = options ?? Options();
+    requestOptions.headers = requestOptions.headers ?? {};
+
+    print(data);
+    print(queryParameters);
+    var response = await dio.put(
       path,
       data: data,
       queryParameters: queryParameters,
