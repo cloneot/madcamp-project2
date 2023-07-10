@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:madcamp_project2/screens/game_waiting_room.dart';
 import 'package:madcamp_project2/screens/login_screen.dart';
 import 'package:madcamp_project2/screens/game_screen.dart';
 import 'package:madcamp_project2/screens/main_menu_screen.dart';
@@ -34,8 +35,10 @@ class MyApp extends StatelessWidget {
         JoinRoomScreen.routeName: (context) => const JoinRoomScreen(),
         UsreInfoScreen.routeName: (context) => const UsreInfoScreen(),
         GameScreen.routeName: (context) => const GameScreen(),
+        GameWaitingRoomScreen.routeName: (context) =>
+            const GameWaitingRoomScreen(),
       },
-      initialRoute: MainMenuScreen.routeName,
+      initialRoute: GameScreen.routeName,
     );
   }
 }
