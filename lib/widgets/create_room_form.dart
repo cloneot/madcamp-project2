@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:madcamp_project2/resources/socket_methods.dart';
 import 'package:madcamp_project2/screens/game_screen.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class CreateRoomForm extends StatefulWidget {
   const CreateRoomForm({super.key});
@@ -10,8 +12,15 @@ class CreateRoomForm extends StatefulWidget {
 
 class _CreateRoomFormState extends State<CreateRoomForm> {
   final _formKey = GlobalKey<FormState>();
+  final SocketMethods _socketMethods = SocketMethods();
   String roomName = '';
   String password = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _socketMethods.createRoomSuccessListener(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,16 +55,23 @@ class _CreateRoomFormState extends State<CreateRoomForm> {
             onSaved: (newValue) => password = newValue ?? '',
           ),
           Padding(
-            padding: const EdgeInsets.all(15),
+            padding: const EdgeInsets.all(20),
             child: ElevatedButton(
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
                   _formKey.currentState!.save();
-                  print('roomname: $roomName, password: $password');
+                  Fluttertoast.showToast(
+                      msg: 'roomName: $roomName, password: $password',
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.CENTER,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: Colors.red,
+                      textColor: Colors.white,
+                      fontSize: 16.0
+                  );
 
-                  // _socketMethods.createRoom()
-                  // createRoom() -> createRoomSuccessListener() -> GameScreen
-                  Navigator.popAndPushNamed(context, GameScreen.routeName);
+                  //서버에 방 생성 요청
+                  _socketMethods.createRoom(roomName);
                 }
               },
               child: const Text('Create Room'),
