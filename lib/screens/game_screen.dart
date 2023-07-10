@@ -9,9 +9,12 @@ class GameScreen extends StatefulWidget {
 }
 
 class _GameScreenState extends State<GameScreen> {
+  //late final dynamic room;
+
   @override
   void initState() {
     super.initState();
+    //room = ModalRoute.of(context)?.settings.arguments;
     // socket method init
   }
 

@@ -8,7 +8,8 @@ class HttpUtil {
 
   HttpUtil._internal() {
     BaseOptions options = BaseOptions(
-      baseUrl: "http://172.10.5.113:80",
+      baseUrl: "http://172.10.5.98:80",
+      // baseUrl: "http://172.10.5.113:80",
       // baseUrl: "http://localhost:80",
       connectTimeout: const Duration(milliseconds: 5000),
       receiveTimeout: const Duration(milliseconds: 3000),
@@ -45,6 +46,7 @@ class HttpUtil {
       options: options,
       // cancelToken: cancelToken,
     );
+    print(response);
     return response.data;
   }
 

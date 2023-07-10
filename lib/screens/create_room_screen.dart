@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:madcamp_project2/widgets/create_room_form.dart';
 
+import '../resources/socket_methods.dart';
+
 class CreateRoomScreen extends StatefulWidget {
   static String routeName = '/create_room';
   const CreateRoomScreen({super.key});
@@ -11,12 +13,12 @@ class CreateRoomScreen extends StatefulWidget {
 
 class _CreateRoomScreenState extends State<CreateRoomScreen> {
   final TextEditingController _nameController = TextEditingController();
-  // final SocketMethods _socketMethods = SocketMethods();
+  final SocketMethods _socketMethods = SocketMethods();
 
   @override
   void initState() {
     super.initState();
-    // socket init
+    _socketMethods.createRoomSuccessListener(context);
   }
 
   @override
