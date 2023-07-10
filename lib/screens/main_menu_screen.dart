@@ -3,6 +3,8 @@ import 'package:madcamp_project2/screens/create_room_screen.dart';
 import 'package:madcamp_project2/screens/join_room_screen.dart';
 import 'package:madcamp_project2/screens/user_info_screen.dart';
 
+import 'login_screen.dart';
+
 class MainMenuScreen extends StatelessWidget {
   static String routeName = '/main_menu';
   const MainMenuScreen({super.key});
@@ -37,6 +39,11 @@ class MainMenuScreen extends StatelessWidget {
             IconButton(
               onPressed: () => userInfo(context),
               icon: const Icon(Icons.person),
+            ),
+            IconButton(
+              onPressed: () =>
+                  Navigator.pushNamed(context, LoginScreen.routeName),
+              icon: const Icon(Icons.logout),
             ),
           ],
         ),

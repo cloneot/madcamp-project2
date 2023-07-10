@@ -9,7 +9,7 @@ class KakaoLogin {
           await UserApi.instance.loginWithKakaoTalk();
           print('카카오톡으로 로그인 성공');
         } catch (err) {
-          print('카카오톡으로 로그인 실패 $err');
+          print('카카오톡으로 로그인 실패1');
           return false;
         }
       } else {
@@ -17,8 +17,8 @@ class KakaoLogin {
           await UserApi.instance.loginWithKakaoAccount();
           print('카카오계정으로 로그인 성공');
         } catch (err) {
-          print(err);
-          print('카카오계정으로 로그인 실패 $err');
+          // print(err);
+          print('카카오계정으로 로그인 실패2');
           return false;
         }
       }
@@ -34,7 +34,8 @@ class KakaoLogin {
       await UserApi.instance.unlink();
       return true;
     } catch (err) {
-      print(err);
+      // print(err);
+      print('logout failed!');
       return false;
     }
   }

@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
         GameWaitingRoomScreen.routeName: (context) =>
             const GameWaitingRoomScreen(),
       },
-      initialRoute: GameScreen.routeName,
+      initialRoute: LoginScreen.routeName,
     );
   }
 }

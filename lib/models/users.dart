@@ -31,13 +31,13 @@ class Users {
 
   factory Users.fromMap(Map<String, dynamic> map) {
     return Users(
-      id: map['id'] ?? -1,
+      id: map['id'] as int,
       username: map['username'] ?? '',
       description: map['description'] ?? '',
-      totalGames: map['total_games'] ?? 0,
-      wins: map['wins'] ?? 0,
-      losses: map['losses'] ?? 0,
-      draws: map['draws'] ?? 0,
+      totalGames: map['total_games'] as int ?? 0,
+      wins: map['wins'] as int ?? 0,
+      losses: map['losses'] as int ?? 0,
+      draws: map['draws'] as int ?? 0,
     );
   }
 

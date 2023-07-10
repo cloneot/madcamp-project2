@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:madcamp_project2/resources/socket_methods.dart';
-import 'package:madcamp_project2/screens/game_screen.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class CreateRoomForm extends StatefulWidget {
@@ -67,8 +66,7 @@ class _CreateRoomFormState extends State<CreateRoomForm> {
                       timeInSecForIosWeb: 1,
                       backgroundColor: Colors.red,
                       textColor: Colors.white,
-                      fontSize: 16.0
-                  );
+                      fontSize: 16.0);
 
                   //서버에 방 생성 요청
                   _socketMethods.createRoom(roomName);

@@ -20,4 +20,8 @@ class KakaoUserViewModel {
     user = null;
     await _kakaoLogin.logout();
   }
+
+  Future getUser() async {
+    return await UserApi.instance.me();
+  }
 }
