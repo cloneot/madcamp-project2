@@ -114,7 +114,6 @@ class _GameScreenState extends State<GameScreen> {
     if (message.isNotEmpty) {
       // Process the sent message, e.g., send it to the server
       _socketMethods.enterChat(message, room, roomDataProvider.myNickName());
-      _socketMethods.enterChat(message, room, roomDataProvider.myNickName());
       _chatController.clear();
     }
   }
@@ -173,32 +172,34 @@ class _GameScreenState extends State<GameScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: players.map((player) {
-                    return Card(
-                      elevation: 2,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Column(
-                          children: [
-                            Text(
-                              player.username,
-                              style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
+                    return Expanded(
+                      child: Card(
+                        elevation: 2,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        child: Container(
+                          padding: const EdgeInsets.all(16),
+                          child: Column(
+                            children: [
+                              Text(
+                                player['username'],
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              'Win: ${player.winRoundCount}',
-                              style: const TextStyle(fontSize: 12),
-                            ),
-                            Text(
-                              'Score: ${player.currentRoundScore}',
-                              style: const TextStyle(fontSize: 12),
-                            ),
-                          ],
+                              const SizedBox(height: 4),
+                              Text(
+                                'Win: ${player['winRoundCount']}',
+                                style: const TextStyle(fontSize: 12),
+                              ),
+                              Text(
+                                'Score: ${player['currentRoundScore']}',
+                                style: const TextStyle(fontSize: 12),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     );
