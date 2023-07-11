@@ -77,14 +77,6 @@ class _GameWaitingRoomScreenState extends State<GameWaitingRoomScreen> {
     _socketMethods.newPlayerListener(context);
     _socketMethods.gameStartAllowListener(context);
     _socketMethods.youAreNotOwnerListener(context);
-
-    // channel.stream.listen((message) {
-    //   // WebSocket 메시지 수신
-    //   // 메시지를 파싱하여 플레이어 정보 업데이트
-    //   setState(() {
-    //     players = parsePlayerInfo(message);
-    //   });
-    // });
   }
 
   @override

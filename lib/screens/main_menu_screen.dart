@@ -4,6 +4,7 @@ import 'package:madcamp_project2/screens/game_screen.dart';
 import 'package:madcamp_project2/screens/game_waiting_room.dart';
 import 'package:madcamp_project2/screens/user_info_screen.dart';
 import '../resources/socket_methods.dart';
+import 'join_room_screen.dart';
 import 'login_screen.dart';
 
 class MainMenuScreen extends StatefulWidget {
@@ -23,8 +24,8 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
 
   void joinRoom(BuildContext context) {
     print('main menu joinRoom!');
-    _socketMethods.getRoomList();
-    // Navigator.pushNamed(context, JoinRoomScreen.routeName);
+    // _socketMethods.getRoomList();
+    Navigator.pushNamed(context, JoinRoomScreen.routeName);
   }
 
   void userInfo(BuildContext context) {
@@ -35,7 +36,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
   void initState() {
     super.initState();
     print('main menu init state');
-    _socketMethods.getRoomListSuccessListener(context);
+    // _socketMethods.getRoomListSuccessListener(context);
   }
 
   @override

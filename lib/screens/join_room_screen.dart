@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../kakao_user_view_model.dart';
 import '../provider/room_list_provider.dart';
 import '../resources/socket_methods.dart';
+import '../utils/kakao_login.dart';
 
 class JoinRoomScreen extends StatefulWidget {
   static String routeName = '/join_room';
@@ -14,33 +16,17 @@ class JoinRoomScreen extends StatefulWidget {
 
 class _JoinRoomScreenState extends State<JoinRoomScreen> {
   final SocketMethods _socketMethods = SocketMethods();
-
-  // List<RoomData> roomList = [
-  //   RoomData(1234, "Room 1", "Player 1"),
-  //   RoomData(4321, "test!", "junseo"),
-  //   RoomData(414231, "Hello World!", "user1234"),
-  //   RoomData(1234, "Room 1", "Player 1"),
-  //   RoomData(4321, "test!", "junseo"),
-  //   RoomData(414231, "Hello World!", "user1234"),
-  //   RoomData(1234, "Room 1", "Player 1"),
-  //   RoomData(4321, "test!", "junseo"),
-  //   RoomData(414231, "Hello World!", "user1234"),
-  //   RoomData(1234, "Room 1", "Player 1"),
-  //   RoomData(4321, "test!", "junseo"),
-  //   RoomData(414231, "Hello World!", "user1234"),
-  //   RoomData(1234, "Room 1", "Player 1"),
-  //   RoomData(4321, "test!", "junseo"),
-  //   RoomData(414231, "Hello World!", "user1234"),
-  //   RoomData(1234, "Room 1", "Player 1"),
-  //   RoomData(4321, "test!", "junseo"),
-  //   RoomData(414231, "Hello World!", "user1234"),
-  // ];
+  final kakaoUserViewModel = KakaoUserViewModel(KakaoLogin());
 
   @override
   void initState() {
     super.initState();
+    print('join room init state');
     _socketMethods.getRoomListSuccessListener(context);
-    // _socketMethods.getRoomList();
+    _socketMethods.getRoomList();
+    _socketMethods.joinThisRoomListener(context);
+    _socketMethods.wrongRoomIdListener(context);
+    _socketMethods.noRoomSpaceListener(context);
   }
 
   @override
@@ -60,16 +46,16 @@ class _JoinRoomScreenState extends State<JoinRoomScreen> {
           ),
           child: ListView.separated(
             itemCount:
-                Provider.of<RoomListProvider>(context, listen: false).roomCnt,
+                Provider.of<RoomListProvider>(context, listen: true).roomCnt,
             itemBuilder: (context, index) {
               return Container(
                 child: ListTile(
                   title: Text(
-                      Provider.of<RoomListProvider>(context, listen: false)
+                      Provider.of<RoomListProvider>(context, listen: true)
                               .roomList[index]['name'] ??
                           'null'),
                   subtitle: Text(
-                      Provider.of<RoomListProvider>(context, listen: false)
+                      Provider.of<RoomListProvider>(context, listen: true)
                               .roomList[index]?['owner'] ??
                           'null'),
                   onTap: () {
@@ -113,8 +99,11 @@ class _JoinRoomScreenState extends State<JoinRoomScreen> {
             TextButton(
               child: const Text('들어가기'),
               onPressed: () {
-                // TODO: 방에 들어가는 로직을 여기에 구현합니다.
                 print('enter the room!');
+                _socketMethods.joinRoom(
+                    kakaoUserViewModel.user?.kakaoAccount?.profile?.nickname ??
+                        '익명',
+                    room['id']);
                 Navigator.pop(context); // 다이얼로그 닫기
               },
             ),
