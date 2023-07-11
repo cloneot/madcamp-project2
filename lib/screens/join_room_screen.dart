@@ -94,6 +94,7 @@ class _JoinRoomScreenState extends State<JoinRoomScreen> {
               child: const Text('들어가기'),
               onPressed: () {
                 // TODO: 방에 들어가는 로직을 여기에 구현합니다.
+                print('enter the room!');
                 Navigator.pop(context); // 다이얼로그 닫기
               },
             ),

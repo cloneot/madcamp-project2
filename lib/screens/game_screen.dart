@@ -116,6 +116,7 @@ class _GameScreenState extends State<GameScreen> {
     // socket method member
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -156,34 +157,32 @@ class _GameScreenState extends State<GameScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: players.map((player) {
-                    return Expanded(
-                      child: Card(
-                        elevation: 2,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        child: Container(
-                          padding: const EdgeInsets.all(16),
-                          child: Column(
-                            children: [
-                              Text(
-                                player.username,
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                    return Card(
+                      elevation: 2,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          children: [
+                            Text(
+                              player.username,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
                               ),
-                              const SizedBox(height: 4),
-                              Text(
-                                'Win: ${player.winRoundCount}',
-                                style: const TextStyle(fontSize: 12),
-                              ),
-                              Text(
-                                'Score: ${player.currentRoundScore}',
-                                style: const TextStyle(fontSize: 12),
-                              ),
-                            ],
-                          ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              'Win: ${player.winRoundCount}',
+                              style: const TextStyle(fontSize: 12),
+                            ),
+                            Text(
+                              'Score: ${player.currentRoundScore}',
+                              style: const TextStyle(fontSize: 12),
+                            ),
+                          ],
                         ),
                       ),
                     );
@@ -271,6 +270,9 @@ class _GameScreenState extends State<GameScreen> {
   }
 }
 
+/*
+
+ */
 class Player {
   final String username;
   final int winRoundCount;
