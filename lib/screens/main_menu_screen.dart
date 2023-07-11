@@ -2,20 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:madcamp_project2/screens/create_room_screen.dart';
 import 'package:madcamp_project2/screens/game_screen.dart';
 import 'package:madcamp_project2/screens/game_waiting_room.dart';
-import 'package:madcamp_project2/screens/join_room_screen.dart';
 import 'package:madcamp_project2/screens/user_info_screen.dart';
+import '../resources/socket_methods.dart';
 import 'login_screen.dart';
 
-class MainMenuScreen extends StatelessWidget {
+class MainMenuScreen extends StatefulWidget {
   static String routeName = '/main_menu';
   const MainMenuScreen({super.key});
+
+  @override
+  State<MainMenuScreen> createState() => _MainMenuScreenState();
+}
+
+class _MainMenuScreenState extends State<MainMenuScreen> {
+  final SocketMethods _socketMethods = SocketMethods();
 
   void createRoom(BuildContext context) {
     Navigator.pushNamed(context, CreateRoomScreen.routeName);
   }
 
   void joinRoom(BuildContext context) {
-    Navigator.pushNamed(context, JoinRoomScreen.routeName);
+    print('main menu joinRoom!');
+    _socketMethods.getRoomList();
+    // Navigator.pushNamed(context, JoinRoomScreen.routeName);
   }
 
   void userInfo(BuildContext context) {
@@ -23,7 +32,15 @@ class MainMenuScreen extends StatelessWidget {
   }
 
   @override
+  void initState() {
+    super.initState();
+    print('main menu init state');
+    _socketMethods.getRoomListSuccessListener(context);
+  }
+
+  @override
   Widget build(BuildContext context) {
+    print('main menu build');
     return Scaffold(
       body: Center(
         child: Row(

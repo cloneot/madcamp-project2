@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../provider/room_list_provider.dart';
+import '../resources/socket_methods.dart';
 
 class JoinRoomScreen extends StatefulWidget {
   static String routeName = '/join_room';
@@ -9,34 +13,39 @@ class JoinRoomScreen extends StatefulWidget {
 }
 
 class _JoinRoomScreenState extends State<JoinRoomScreen> {
-  final TextEditingController _gameIdController = TextEditingController();
-  final TextEditingController _nameController = TextEditingController();
-  List<RoomData> roomList = [
-    RoomData(1234, "Room 1", "Player 1"),
-    RoomData(4321, "test!", "junseo"),
-    RoomData(414231, "Hello World!", "user1234"),
-    RoomData(1234, "Room 1", "Player 1"),
-    RoomData(4321, "test!", "junseo"),
-    RoomData(414231, "Hello World!", "user1234"),
-    RoomData(1234, "Room 1", "Player 1"),
-    RoomData(4321, "test!", "junseo"),
-    RoomData(414231, "Hello World!", "user1234"),
-    RoomData(1234, "Room 1", "Player 1"),
-    RoomData(4321, "test!", "junseo"),
-    RoomData(414231, "Hello World!", "user1234"),
-    RoomData(1234, "Room 1", "Player 1"),
-    RoomData(4321, "test!", "junseo"),
-    RoomData(414231, "Hello World!", "user1234"),
-    RoomData(1234, "Room 1", "Player 1"),
-    RoomData(4321, "test!", "junseo"),
-    RoomData(414231, "Hello World!", "user1234"),
-  ];
+  final SocketMethods _socketMethods = SocketMethods();
+
+  // List<RoomData> roomList = [
+  //   RoomData(1234, "Room 1", "Player 1"),
+  //   RoomData(4321, "test!", "junseo"),
+  //   RoomData(414231, "Hello World!", "user1234"),
+  //   RoomData(1234, "Room 1", "Player 1"),
+  //   RoomData(4321, "test!", "junseo"),
+  //   RoomData(414231, "Hello World!", "user1234"),
+  //   RoomData(1234, "Room 1", "Player 1"),
+  //   RoomData(4321, "test!", "junseo"),
+  //   RoomData(414231, "Hello World!", "user1234"),
+  //   RoomData(1234, "Room 1", "Player 1"),
+  //   RoomData(4321, "test!", "junseo"),
+  //   RoomData(414231, "Hello World!", "user1234"),
+  //   RoomData(1234, "Room 1", "Player 1"),
+  //   RoomData(4321, "test!", "junseo"),
+  //   RoomData(414231, "Hello World!", "user1234"),
+  //   RoomData(1234, "Room 1", "Player 1"),
+  //   RoomData(4321, "test!", "junseo"),
+  //   RoomData(414231, "Hello World!", "user1234"),
+  // ];
+
+  @override
+  void initState() {
+    super.initState();
+    _socketMethods.getRoomListSuccessListener(context);
+    // _socketMethods.getRoomList();
+  }
 
   @override
   void dispose() {
     super.dispose();
-    _gameIdController.dispose();
-    _nameController.dispose();
   }
 
   @override
@@ -50,14 +59,24 @@ class _JoinRoomScreenState extends State<JoinRoomScreen> {
             borderRadius: BorderRadius.circular(10),
           ),
           child: ListView.separated(
-            itemCount: roomList.length,
+            itemCount:
+                Provider.of<RoomListProvider>(context, listen: false).roomCnt,
             itemBuilder: (context, index) {
               return Container(
                 child: ListTile(
-                  title: Text(roomList[index].roomName),
-                  subtitle: Text(roomList[index].roomOwner),
+                  title: Text(
+                      Provider.of<RoomListProvider>(context, listen: false)
+                              .roomList[index]['name'] ??
+                          'null'),
+                  subtitle: Text(
+                      Provider.of<RoomListProvider>(context, listen: false)
+                              .roomList[index]?['owner'] ??
+                          'null'),
                   onTap: () {
-                    _showConfirmationDialog(context, roomList[index]);
+                    _showConfirmationDialog(
+                        context,
+                        Provider.of<RoomListProvider>(context, listen: false)
+                            .roomList[index]);
                   },
                 ),
               );
@@ -71,7 +90,8 @@ class _JoinRoomScreenState extends State<JoinRoomScreen> {
     );
   }
 
-  void _showConfirmationDialog(BuildContext context, RoomData room) {
+  void _showConfirmationDialog(
+      BuildContext context, Map<String, dynamic> room) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -83,9 +103,9 @@ class _JoinRoomScreenState extends State<JoinRoomScreen> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('room id: ${room.roomId}'),
-                Text('room name: ${room.roomName}'),
-                Text('room owner: ${room.roomOwner}'),
+                Text('room id: ${room['id']}'),
+                Text('room name: ${room['name']}'),
+                Text('room owner: ${room['owner']}'),
               ],
             ),
           ),
@@ -109,11 +129,4 @@ class _JoinRoomScreenState extends State<JoinRoomScreen> {
       },
     );
   }
-}
-
-class RoomData {
-  int roomId;
-  String roomName;
-  String roomOwner;
-  RoomData(this.roomId, this.roomName, this.roomOwner);
 }

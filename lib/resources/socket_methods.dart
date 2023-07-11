@@ -10,6 +10,8 @@ import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:madcamp_project2/models/chat_message.dart';
+import '../provider/room_list_provider.dart';
+import '../screens/join_room_screen.dart';
 
 class SocketMethods {
   final _socketClient = SocketClient.instance.socket!;
@@ -17,14 +19,15 @@ class SocketMethods {
 
   //방 생성 emit (done)
   void createRoom(String roomName, String nickName) {
-    if(roomName.isNotEmpty && nickName.isNotEmpty) {
-      _socketClient.emit('createRoom', {'roomName': roomName, 'nickName': nickName});
+    if (roomName.isNotEmpty && nickName.isNotEmpty) {
+      _socketClient
+          .emit('createRoom', {'roomName': roomName, 'nickName': nickName});
     }
   }
 
   //방 참여 emit
   void joinRoom(String nickName, String roomId) {
-    if(nickName.isNotEmpty && roomId.isNotEmpty) {
+    if (nickName.isNotEmpty && roomId.isNotEmpty) {
       _socketClient.emit('joinRoom', {
         'nickName': nickName,
         'roomId': roomId,
@@ -34,17 +37,17 @@ class SocketMethods {
 
   //game start request emit
   void gameStart(String nickName, String roomId) {
-    if(nickName.isNotEmpty && roomId.isNotEmpty) {
+    if (nickName.isNotEmpty && roomId.isNotEmpty) {
       _socketClient.emit('gameStart', {
-      'nickName': nickName,
-      'roomId': roomId,
+        'nickName': nickName,
+        'roomId': roomId,
       });
     }
   }
 
   //TODO 채팅 내용 emit
   void enterChat(String chat, dynamic room, String? myNickName) {
-    if(chat.isNotEmpty) {
+    if (chat.isNotEmpty) {
       _socketClient.emit('enterChat', {
         'chat': chat,
         'room': room,
@@ -56,7 +59,7 @@ class SocketMethods {
   //잘못된 enterChat 방 id or 방 name
   void roomDataErrorListener(BuildContext context) {
     _socketClient.off('roomDataError');
-    _socketClient.on('roomDataError',(_) {
+    _socketClient.on('roomDataError', (_) {
       Fluttertoast.showToast(
           msg: 'roomDataError',
           toastLength: Toast.LENGTH_SHORT,
@@ -64,8 +67,7 @@ class SocketMethods {
           timeInSecForIosWeb: 1,
           backgroundColor: Colors.red,
           textColor: Colors.white,
-          fontSize: 16.0
-      );
+          fontSize: 16.0);
     });
   }
 
@@ -88,15 +90,14 @@ class SocketMethods {
           timeInSecForIosWeb: 1,
           backgroundColor: Colors.red,
           textColor: Colors.white,
-          fontSize: 16.0
-      );
+          fontSize: 16.0);
     });
   }
 
   //잘못된 roomId로 join on (done)
   void wrongRoomIdListener(BuildContext context) {
     _socketClient.off('wrongRoomId');
-    _socketClient.on('wrongRoomId', (msg){
+    _socketClient.on('wrongRoomId', (msg) {
       Fluttertoast.showToast(
           msg: msg,
           toastLength: Toast.LENGTH_SHORT,
@@ -104,15 +105,14 @@ class SocketMethods {
           timeInSecForIosWeb: 1,
           backgroundColor: Colors.red,
           textColor: Colors.white,
-          fontSize: 16.0
-      );
+          fontSize: 16.0);
     });
   }
 
   //방에 자리가 없음 on
   void noRoomSpaceListener(BuildContext context) {
     _socketClient.off('noRoomSpace');
-    _socketClient.on('noRoomSpace', (msg){
+    _socketClient.on('noRoomSpace', (msg) {
       Fluttertoast.showToast(
           msg: msg,
           toastLength: Toast.LENGTH_SHORT,
@@ -120,8 +120,7 @@ class SocketMethods {
           timeInSecForIosWeb: 1,
           backgroundColor: Colors.red,
           textColor: Colors.white,
-          fontSize: 16.0
-      );
+          fontSize: 16.0);
     });
   }
 
@@ -129,8 +128,10 @@ class SocketMethods {
   void joinThisRoomListener(BuildContext context) {
     _socketClient.off('joinThisRoom');
     _socketClient.on('joinThisRoom', (room) {
-      Provider.of<RoomDataProvider>(context, listen: false).updateRoomData(room);
-      Provider.of<RoomDataProvider>(context, listen: false).setMePlayer(room.space);
+      Provider.of<RoomDataProvider>(context, listen: false)
+          .updateRoomData(room);
+      // Provider.of<RoomDataProvider>(context, listen: false)
+      //     .setMePlayer(room.space);
       //TODO 참가자 게임 대기화면으로 바꾸기
       Navigator.popAndPushNamed(context, GameWaitingRoomScreen.routeName);
     });
@@ -165,8 +166,7 @@ class SocketMethods {
           timeInSecForIosWeb: 1,
           backgroundColor: Colors.red,
           textColor: Colors.white,
-          fontSize: 16.0
-      );
+          fontSize: 16.0);
       //정답 맞춘 뒤 상황 추가
       Provider.of<ChatDataProvider>(context,listen: false).clearChatMessage();
       Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const MainMenuScreen()), (route) => false);
@@ -185,4 +185,18 @@ class SocketMethods {
     });
   }
 
+  void getRoomList() {
+    _socketClient.emit('getRoomList');
+  }
+
+  // 방 목록 success
+  void getRoomListSuccessListener(BuildContext context) {
+    _socketClient.off('getRoomListSuccess');
+    _socketClient.on('getRoomListSuccess', (roomList) {
+      print('getRoomListListener success: $roomList');
+      Provider.of<RoomListProvider>(context, listen: false)
+          .updateRoomList(roomList);
+      Navigator.pushNamed(context, JoinRoomScreen.routeName);
+    });
+  }
 }

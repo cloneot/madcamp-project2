@@ -174,19 +174,15 @@ class _GameWaitingRoomScreenState extends State<GameWaitingRoomScreen> {
             ElevatedButton(
               onPressed: () {
                 // 게임 시작 버튼 클릭 시 동작
-                if(roomDataProvider.mePlayer==1){
+                if (roomDataProvider.mePlayer == 1) {
                   _socketMethods.gameStart(room['owner'], room['id']);
-                }
-                else if(roomDataProvider.mePlayer==2) {
+                } else if (roomDataProvider.mePlayer == 2) {
                   _socketMethods.gameStart(room['player2'], room['id']);
-                }
-                else if(roomDataProvider.mePlayer==3) {
+                } else if (roomDataProvider.mePlayer == 3) {
                   _socketMethods.gameStart(room['player3'], room['id']);
-                }
-                else if(roomDataProvider.mePlayer==4) {
+                } else if (roomDataProvider.mePlayer == 4) {
                   _socketMethods.gameStart(room['player4'], room['id']);
                 }
-
               },
               child: const Padding(
                 padding: EdgeInsets.all(16.0),

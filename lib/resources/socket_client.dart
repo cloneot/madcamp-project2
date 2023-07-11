@@ -5,7 +5,11 @@ class SocketClient {
   static SocketClient? _instance;
 
   SocketClient._internal() {
-    socket = IO.io('http://172.10.5.98',<String, dynamic>{
+    // socket = IO.io('http://172.10.5.98', <String, dynamic>{
+    //   'transports': ['websocket'],
+    //   'autoConnect': false,
+    // });
+    socket = IO.io('http://172.10.5.113', <String, dynamic>{
       'transports': ['websocket'],
       'autoConnect': false,
     });
