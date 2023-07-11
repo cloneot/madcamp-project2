@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:madcamp_project2/widgets/create_room_form.dart';
 
-import '../resources/socket_methods.dart';
-
 class CreateRoomScreen extends StatefulWidget {
   static String routeName = '/create_room';
   const CreateRoomScreen({super.key});

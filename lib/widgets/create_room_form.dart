@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:madcamp_project2/resources/socket_methods.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:provider/provider.dart';
 
 class CreateRoomForm extends StatefulWidget {
   const CreateRoomForm({super.key});
@@ -12,7 +10,7 @@ class CreateRoomForm extends StatefulWidget {
 
 class _CreateRoomFormState extends State<CreateRoomForm> {
   final _formKey = GlobalKey<FormState>();
-  final  SocketMethods _socketMethods = SocketMethods();
+  final SocketMethods _socketMethods = SocketMethods();
   String roomName = '';
   String password = '';
   String nickName = '';
