@@ -2,8 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:madcamp_project2/utils/http_utils.dart';
+import 'package:provider/provider.dart';
 
 import '../kakao_user_view_model.dart';
+import '../provider/user_data_provider.dart';
 import '../utils/kakao_login.dart';
 import 'main_menu_screen.dart';
 
@@ -53,6 +55,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           if (kakaoUserViewModel.isLogined) {
                             if (!mounted) return;
 
+                            Provider.of<UserDataProvider>(context,
+                                    listen: false)
+                                .fetchData();
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                 content: Center(
@@ -94,6 +99,16 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   IconButton(
                     onPressed: () {
+                      Provider.of<UserDataProvider>(context, listen: false)
+                          .setGuest();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Center(
+                            child: Text('게스트 로그인 하셨습니다'),
+                          ),
+                          duration: Duration(milliseconds: 1000),
+                        ),
+                      );
                       Navigator.pushNamed(context, MainMenuScreen.routeName);
                     },
                     icon: const Icon(Icons.arrow_circle_right_outlined),
