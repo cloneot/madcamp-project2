@@ -24,9 +24,9 @@ class _GameScreenState extends State<GameScreen> {
   late Timer timer;
   final SocketMethods _socketMethods = SocketMethods();
 
+  late FocusNode _chatFocusNode;
   final TextEditingController _chatController = TextEditingController();
   final ScrollController _chatScrollController = ScrollController();
-  final FocusNode _chatFocusNode = FocusNode();
   late dynamic room;
 
   void onTick(Timer timer) {
@@ -52,6 +52,7 @@ class _GameScreenState extends State<GameScreen> {
     _socketMethods.wrongAnswerListener(context);
     _socketMethods.roomDataErrorListener(context);
     _socketMethods.timeOverFromServerListener(context);
+    _chatFocusNode = FocusNode();
     onStartRound();
   }
 
@@ -61,6 +62,7 @@ class _GameScreenState extends State<GameScreen> {
     _chatScrollController.dispose();
     _chatFocusNode.dispose();
     chatDataProvider.clearChatMessage();
+    timer.cancel();
     super.dispose();
   }
 
@@ -224,22 +226,40 @@ class _GameScreenState extends State<GameScreen> {
                     Row(
                       children: [
                         Expanded(
-                          child: TextField(
-                            controller: _chatController,
-                            focusNode: _chatFocusNode,
-                            textInputAction: TextInputAction.done,
-                            decoration: const InputDecoration(
-                              hintText: 'Type a message...',
+                          child: Container(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextField(
+                              controller: _chatController,
+                              focusNode: _chatFocusNode,
+                              textInputAction: TextInputAction.done,
+                              decoration: const InputDecoration(
+                                hintText: 'Type a message...',
+                              ),
+                              onSubmitted: (value) {
+                                _sendMessage();
+                                FocusScope.of(context)
+                                    .requestFocus(_chatFocusNode);
+                              },
                             ),
-                            onSubmitted: (value) {
-                              _sendMessage();
-                            },
                           ),
-                        ),
-                        // IconButton(
-                        //   icon: const Icon(Icons.send),
-                        //   onPressed: _sendMessage,
-                        // ),
+
+                          //   child: TextField(
+                          //     controller: _chatController,
+                          //     focusNode: _chatFocusNode,
+                          //     textInputAction: TextInputAction.done,
+                          //     decoration: const InputDecoration(
+                          //       hintText: 'Type a message...',
+                          //     ),
+                          //     onSubmitted: (value) {
+                          //       _sendMessage();
+                          //     },
+                          //   ),
+                          // ),
+                          // IconButton(
+                          //   icon: const Icon(Icons.send),
+                          //   onPressed: _sendMessage,
+                          // ),
+                        )
                       ],
                     ),
                   ],

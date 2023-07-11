@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../kakao_user_view_model.dart';
 import '../provider/room_list_provider.dart';
+import '../provider/user_data_provider.dart';
 import '../resources/socket_methods.dart';
 import '../utils/kakao_login.dart';
 
@@ -101,8 +102,9 @@ class _JoinRoomScreenState extends State<JoinRoomScreen> {
               onPressed: () {
                 print('enter the room!');
                 _socketMethods.joinRoom(
-                    kakaoUserViewModel.user?.kakaoAccount?.profile?.nickname ??
-                        '익명',
+                    Provider.of<UserDataProvider>(context, listen: false)
+                            .username ??
+                        'name_error',
                     room['id']);
                 Navigator.pop(context); // 다이얼로그 닫기
               },
