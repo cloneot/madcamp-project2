@@ -28,6 +28,7 @@ class GameWaitingRoomScreen extends StatefulWidget {
 }
 
 class _GameWaitingRoomScreenState extends State<GameWaitingRoomScreen> {
+  bool isHost = true;
   int roomId = 12345; // Room ID 변수
   String roomName = 'Game Room'; // Room Name 변수
   final List<Player> players = [
@@ -153,18 +154,26 @@ class _GameWaitingRoomScreenState extends State<GameWaitingRoomScreen> {
               ),
             ),
             const SizedBox(height: 16.0),
-            ElevatedButton(
-              onPressed: () {
-                // 게임 시작 버튼 클릭 시 동작
-              },
-              child: const Padding(
-                padding: EdgeInsets.all(16.0),
-                child: Text(
-                  'Start Game',
-                  style: TextStyle(fontSize: 24.0),
-                ),
-              ),
-            ),
+            isHost
+                ? ElevatedButton(
+                    onPressed: () {
+                      print("start game!");
+                    },
+                    child: const Text('Start Game'),
+                  )
+                : TextButton(
+                    onPressed: null,
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                          Colors.grey[300]!), // 배경색 변경
+                    ), // 비활성화 상태로 설정
+                    child: const Text(
+                      'Start Game',
+                      style: TextStyle(
+                        color: Colors.grey, // 텍스트 색상 변경
+                      ),
+                    ),
+                  ),
             const SizedBox(height: 16.0),
           ],
         ),
