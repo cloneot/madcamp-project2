@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:madcamp_project2/provider/chat_data_provider.dart';
 import 'package:madcamp_project2/provider/room_data_provider.dart';
 import 'package:madcamp_project2/provider/room_list_provider.dart';
+import 'package:madcamp_project2/provider/user_data_provider.dart';
 import 'package:madcamp_project2/screens/game_waiting_room.dart';
 import 'package:madcamp_project2/screens/login_screen.dart';
 import 'package:madcamp_project2/screens/game_screen.dart';
@@ -33,9 +34,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<RoomDataProvider>(create: (context) => RoomDataProvider()),
-        ChangeNotifierProvider<ChatDataProvider>(create: (context) => ChatDataProvider()),
-        ChangeNotifierProvider<RoomListProvider>(create: (context) => RoomListProvider()),
+        ChangeNotifierProvider<RoomDataProvider>(
+            create: (context) => RoomDataProvider()),
+        ChangeNotifierProvider<ChatDataProvider>(
+            create: (context) => ChatDataProvider()),
+        ChangeNotifierProvider<RoomListProvider>(
+            create: (context) => RoomListProvider()),
+        ChangeNotifierProvider<UserDataProvider>(
+            create: (context) => UserDataProvider()),
       ],
       child: MaterialApp(
         title: 'MadCampProject2',

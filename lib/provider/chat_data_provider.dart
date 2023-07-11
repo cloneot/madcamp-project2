@@ -13,6 +13,5 @@ class ChatDataProvider extends ChangeNotifier {
 
   void clearChatMessage() {
     _chatMessages.clear();
-    notifyListeners();
   }
 }
