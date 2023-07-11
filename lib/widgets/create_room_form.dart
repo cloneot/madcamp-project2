@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:madcamp_project2/resources/socket_methods.dart';
-import 'package:madcamp_project2/screens/game_screen.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class CreateRoomForm extends StatefulWidget {

@@ -39,6 +39,8 @@ dependencies:
   dio: ^5.2.1+1
   socket_io_client: ^2.0.2
   fluttertoast: ^8.2.2
+  kakao_flutter_sdk_user: ^1.4.3
+  flutter_dialogs: ^3.0.0
 
 dev_dependencies:
   flutter_test:

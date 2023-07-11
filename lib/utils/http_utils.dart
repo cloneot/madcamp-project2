@@ -8,8 +8,8 @@ class HttpUtil {
 
   HttpUtil._internal() {
     BaseOptions options = BaseOptions(
-      baseUrl: "http://172.10.5.98:80",
-      // baseUrl: "http://172.10.5.113:80",
+      // baseUrl: "http://172.10.5.98:80",
+      baseUrl: "http://172.10.5.113:80",
       // baseUrl: "http://localhost:80",
       connectTimeout: const Duration(milliseconds: 5000),
       receiveTimeout: const Duration(milliseconds: 3000),
@@ -67,10 +67,10 @@ class HttpUtil {
   }) async {
     Options requestOptions = options ?? Options();
     requestOptions.headers = requestOptions.headers ?? {};
-    Map<String, dynamic>? authorization = getAuthorizationHeader();
-    if (authorization != null) {
-      requestOptions.headers!.addAll(authorization);
-    }
+    // Map<String, dynamic>? authorization = getAuthorizationHeader();
+    // if (authorization != null) {
+    //   requestOptions.headers!.addAll(authorization);
+    // }
     var response = await dio.post(
       path,
       data: data,
@@ -78,7 +78,27 @@ class HttpUtil {
       options: requestOptions,
       // cancelToken: cancelToken,
     );
+    return response.data;
+  }
 
+  Future put(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+  }) async {
+    Options requestOptions = options ?? Options();
+    requestOptions.headers = requestOptions.headers ?? {};
+
+    print(data);
+    var response = await dio.put(
+      path,
+      data: data,
+      queryParameters: queryParameters,
+      options: requestOptions,
+      // cancelToken: cancelToken,
+    );
+    print('response.data: ${response.data}');
     return response.data;
   }
 }

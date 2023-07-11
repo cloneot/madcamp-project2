@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:madcamp_project2/screens/create_room_screen.dart';
+import 'package:madcamp_project2/screens/game_screen.dart';
+import 'package:madcamp_project2/screens/game_waiting_room.dart';
 import 'package:madcamp_project2/screens/join_room_screen.dart';
 import 'package:madcamp_project2/screens/user_info_screen.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:socket_io_common/src/util/event_emitter.dart';
+
+import 'login_screen.dart';
 
 class MainMenuScreen extends StatelessWidget {
   static String routeName = '/main_menu';
@@ -39,8 +40,22 @@ class MainMenuScreen extends StatelessWidget {
             ),
             IconButton(
               onPressed: () => userInfo(context),
-              icon: const Icon(Icons.person),
+              icon: const Icon(Icons.person_outline),
             ),
+            IconButton(
+              onPressed: () =>
+                  Navigator.pushNamed(context, LoginScreen.routeName),
+              icon: const Icon(Icons.logout),
+            ),
+            IconButton(
+              onPressed: () =>
+                  Navigator.pushNamed(context, GameWaitingRoomScreen.routeName),
+              icon: const Icon(Icons.watch_later_outlined),
+            ),
+            IconButton(
+                onPressed: () =>
+                    Navigator.pushNamed(context, GameScreen.routeName),
+                icon: const Icon(Icons.videogame_asset_outlined)),
           ],
         ),
       ),

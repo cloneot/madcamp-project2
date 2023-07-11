@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:madcamp_project2/utils/http_utils.dart';
+
+import '../kakao_user_view_model.dart';
+import '../models/users.dart';
+import '../utils/http_utils.dart';
+import '../utils/kakao_login.dart';
 
 class UsreInfoScreen extends StatefulWidget {
   static String routeName = '/user_info';
@@ -10,8 +14,9 @@ class UsreInfoScreen extends StatefulWidget {
 }
 
 class _UsreInfoScreenState extends State<UsreInfoScreen> {
-  var myController = TextEditingController();
-  var username = 'asdf';
+  final kakaoUserViewModel = KakaoUserViewModel(KakaoLogin());
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController descriptionController = TextEditingController();
 
   @override
   void initState() {
@@ -19,58 +24,59 @@ class _UsreInfoScreenState extends State<UsreInfoScreen> {
     print('user info init state');
   }
 
+  Future<Users> fetchData() async {
+    int userid = (await kakaoUserViewModel.getUser()).id;
+    Users user = Users.fromMap((await HttpUtil().get('/users/$userid')));
+    usernameController.text = user.username;
+    descriptionController.text = user.description;
+    return user;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Column(
-          children: [
-            const Text("User Info Screen22"),
-            TextField(
-              controller: myController,
-              onChanged: (value) => setState(() => username = value),
-            ),
-            Text(
-              '/users/${myController.text}',
-            ),
-            // FutureBuilder(
-            //   future: HttpUtil().get('/test'),
-            //   builder: (context, snapshot) {
-            //     if (snapshot.connectionState == ConnectionState.done) {
-            //       if (snapshot.hasError) {
-            //         return Text("Error: ${snapshot.error}");
-            //       }
-            //       return Text("Contents: ${snapshot.data}");
-            //     } else {
-            //       return const CircularProgressIndicator();
-            //     }
-            //   },
-            // ),
-            Text(username),
-            IconButton(
-              icon: const Icon(Icons.search),
-              onPressed: () async {
-                try {
-                  // var response = await dio.get('http://localhost:80/test');
-                  var response =
-                      await HttpUtil().get('/users/${myController.text}');
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(response.toString()),
-                      duration: const Duration(seconds: 1),
-                      action: SnackBarAction(
-                        label: 'undo',
-                        onPressed: () {},
-                      ),
-                    ),
-                  );
-                } catch (err, stkTrace) {
-                  print("exception occur: $err stackTrace: $stkTrace");
-                }
-              },
-            ),
-          ],
+        child: FutureBuilder<Users>(
+          future: fetchData(),
+          builder: (BuildContext context, AsyncSnapshot<Users> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              // 로딩 중인 경우
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else {
+              if (snapshot.hasError) {
+                // 에러가 발생한 경우
+                return const Center(
+                  child: Text('사용자 정보를 확인할 수 없습니다. '),
+                );
+              } else {
+                // 작업이 완료된 경우 데이터를 기반으로 화면을 구성하는 위젯 반환
+                return buildContent(snapshot.data!);
+              }
+            }
+          },
         ),
+      ),
+    );
+  }
+
+  Widget buildContent(Users user) {
+    return Padding(
+      padding: const EdgeInsets.all(18.0),
+      child: Column(
+        children: [
+          const SizedBox(height: 100),
+          TextField(controller: usernameController),
+          TextField(controller: descriptionController),
+          Text('${user.wins}승 / ${user.draws}무 / ${user.losses}패'),
+          ElevatedButton(
+              onPressed: () {
+                print(
+                    '${usernameController.text}, ${descriptionController.text}');
+              },
+              child: const Text('저장')),
+        ],
       ),
     );
   }
