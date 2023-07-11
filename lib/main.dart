@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:madcamp_project2/provider/chat_data_provider.dart';
 import 'package:madcamp_project2/provider/room_data_provider.dart';
 import 'package:madcamp_project2/screens/game_waiting_room.dart';
 import 'package:madcamp_project2/screens/login_screen.dart';
@@ -29,8 +30,11 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => RoomDataProvider(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<RoomDataProvider>(create: (context) => RoomDataProvider()),
+        ChangeNotifierProvider<ChatDataProvider>(create: (context) => ChatDataProvider())
+      ],
       child: MaterialApp(
         title: 'MadCampProject2',
         routes: {
