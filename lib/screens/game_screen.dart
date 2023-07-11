@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:madcamp_project2/provider/room_data_provider.dart';
+import 'package:provider/provider.dart';
 
 class GameScreen extends StatefulWidget {
   static String routeName = '/game';
@@ -9,22 +11,22 @@ class GameScreen extends StatefulWidget {
 }
 
 class _GameScreenState extends State<GameScreen> {
-  //late final dynamic room;
 
   @override
   void initState() {
     super.initState();
-    //room = ModalRoute.of(context)?.settings.arguments;
     // socket method init
   }
 
   @override
   Widget build(BuildContext context) {
+    RoomDataProvider roomDataProvider = Provider.of<RoomDataProvider>(context, listen: false);
+    final dynamic room = roomDataProvider.roomData;
     // socket method member
 
-    return const Scaffold(
+    return Scaffold(
       body: Center(
-        child: Text('Game Screen'),
+        child: Text('Game Screen with $room'),
       ),
     );
   }

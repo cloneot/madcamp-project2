@@ -15,6 +15,7 @@ class _CreateRoomFormState extends State<CreateRoomForm> {
   final SocketMethods _socketMethods = SocketMethods();
   String roomName = '';
   String password = '';
+  String nickName = '';
 
   @override
   void initState() {
@@ -54,24 +55,22 @@ class _CreateRoomFormState extends State<CreateRoomForm> {
             textInputAction: TextInputAction.done,
             onSaved: (newValue) => password = newValue ?? '',
           ),
+          TextFormField(
+            maxLength: 20,
+            decoration: const InputDecoration(
+              hintText: "Enter nickname",
+            ),
+            autovalidateMode: AutovalidateMode.always,
+            textInputAction: TextInputAction.done,
+            onSaved: (newValue) => nickName = newValue ?? '',
+          ),
           Padding(
             padding: const EdgeInsets.all(20),
             child: ElevatedButton(
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
                   _formKey.currentState!.save();
-                  Fluttertoast.showToast(
-                      msg: 'roomName: $roomName, password: $password',
-                      toastLength: Toast.LENGTH_SHORT,
-                      gravity: ToastGravity.CENTER,
-                      timeInSecForIosWeb: 1,
-                      backgroundColor: Colors.red,
-                      textColor: Colors.white,
-                      fontSize: 16.0
-                  );
-
-                  //서버에 방 생성 요청
-                  _socketMethods.createRoom(roomName);
+                  _socketMethods.createRoom(roomName, nickName);
                 }
               },
               child: const Text('Create Room'),
