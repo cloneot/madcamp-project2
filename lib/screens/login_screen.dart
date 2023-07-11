@@ -21,29 +21,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // print('rebuild!');
-    // if (kakaoUserViewModel.isLogined) {
-    //   try {
-    //     final int id = kakaoUserViewModel.user!.id;
-    //     final String nickname =
-    //         kakaoUserViewModel.user!.kakaoAccount!.profile!.nickname!;
-    //     print('id: $id');
-    //     print('nickname: $nickname');
-
-    //     const JsonCodec json = JsonCodec();
-    //     final dynamic data = json.encode({'username': nickname});
-
-    //     // print(queryParameter);
-    //     HttpUtil().put('/users/$id', data: data);
-    //     if (kakaoUserViewModel.isLogined) {
-    //       Navigator.pushNamed(context, MainMenuScreen.routeName);
-    //     }
-    //   } catch (e) {
-    //     // print('error: $e');
-    //     print('isLogined: true, but cannot get user.id');
-    //   }
-    // }
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('로그인'),
@@ -71,9 +48,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           const JsonCodec json = JsonCodec();
                           final dynamic data =
                               json.encode({'username': nickname});
-                          print('data: $data');
 
-                          // print(queryParameter);
                           await HttpUtil().put('/users/$id', data: data);
                           if (kakaoUserViewModel.isLogined) {
                             if (!mounted) return;

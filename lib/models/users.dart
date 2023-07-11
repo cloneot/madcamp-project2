@@ -34,10 +34,10 @@ class Users {
       id: map['id'] as int,
       username: map['username'] ?? '',
       description: map['description'] ?? '',
-      totalGames: map['total_games'] as int ?? 0,
-      wins: map['wins'] as int ?? 0,
-      losses: map['losses'] as int ?? 0,
-      draws: map['draws'] as int ?? 0,
+      totalGames: map['total_games'] as int,
+      wins: map['wins'] as int,
+      losses: map['losses'] as int,
+      draws: map['draws'] as int,
     );
   }
 
