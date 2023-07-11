@@ -8,7 +8,6 @@ import 'package:socket_io_client/socket_io_client.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../provider/room_list_provider.dart';
-import '../screens/join_room_screen.dart';
 
 class SocketMethods {
   final _socketClient = SocketClient.instance.socket!;
@@ -25,6 +24,7 @@ class SocketMethods {
   //방 참여 emit
   void joinRoom(String nickName, String roomId) {
     if (nickName.isNotEmpty && roomId.isNotEmpty) {
+      print('joinRoom emit: nickName: $nickName, roomId: $roomId');
       _socketClient.emit('joinRoom', {
         'nickName': nickName,
         'roomId': roomId,
@@ -197,7 +197,6 @@ class SocketMethods {
       print('getRoomListListener success: $roomList');
       Provider.of<RoomListProvider>(context, listen: false)
           .updateRoomList(roomList);
-      Navigator.pushNamed(context, JoinRoomScreen.routeName);
     });
   }
 }
