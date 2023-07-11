@@ -77,9 +77,10 @@ class SocketMethods {
     _socketClient.off('gameStartAllow');
     _socketClient.on('gameStartAllow', (_) {
       timer = Timer(const Duration(seconds: 60), () {
-        _socketClient.emit('timeOver', Provider.of<RoomDataProvider>(context, listen: false).roomData);
+        _socketClient.emit('timeOver',
+            Provider.of<RoomDataProvider>(context, listen: false).roomData);
       });
-      Navigator.pushNamed(context, GameScreen.routeName);
+      Navigator.popAndPushNamed(context, GameScreen.routeName);
     });
   }
 
@@ -134,8 +135,9 @@ class SocketMethods {
     _socketClient.on('joinThisRoom', (room) {
       Provider.of<RoomDataProvider>(context, listen: false)
           .updateRoomData(room);
-      // Provider.of<RoomDataProvider>(context, listen: false)
-      //     .setMePlayer(room.space);
+      print('joinThisRoom listener: space: ${room['space']}');
+      Provider.of<RoomDataProvider>(context, listen: false)
+          .setMePlayer(room['space']);
       //TODO 참가자 게임 대기화면으로 바꾸기
       Navigator.pushNamed(context, GameWaitingRoomScreen.routeName);
     });
@@ -158,7 +160,7 @@ class SocketMethods {
           .updateRoomData(newRoom);
       Provider.of<RoomDataProvider>(context, listen: false)
           .setMePlayer(newRoom['space']);
-      Navigator.pushNamed(context, GameWaitingRoomScreen.routeName);
+      Navigator.popAndPushNamed(context, GameWaitingRoomScreen.routeName);
     });
   }
 
@@ -187,6 +189,7 @@ class SocketMethods {
   void wrongAnswerListener(BuildContext context) {
     _socketClient.off('wrongAnswer');
     _socketClient.on('wrongAnswer', (data) {
+      print('wrongAnswerListener: $data');
       Provider.of<ChatDataProvider>(context, listen: false)
           .addChatMessage(ChatMessage(
         message: data['chat'],
@@ -245,7 +248,7 @@ class SocketMethods {
       Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => const MainMenuScreen()),
-              (route) => false);
+          (route) => false);
     });
   }
 }

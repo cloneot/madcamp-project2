@@ -71,7 +71,9 @@ class _CreateRoomFormState extends State<CreateRoomForm> {
             padding: const EdgeInsets.all(20),
             child: ElevatedButton(
               onPressed: () {
+                print('create room button pressed');
                 if (_formKey.currentState!.validate()) {
+                  print('create room button validate success');
                   _formKey.currentState!.save();
                   _socketMethods.createRoom(roomName, nickName);
                 }

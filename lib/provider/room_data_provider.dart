@@ -51,6 +51,8 @@ class RoomDataProvider extends ChangeNotifier {
     if (_roomData['space'] == 3) {
       _roomData['player2'] = nickName;
       _roomData['space']--;
+      print(
+          'newPlayer nickName: $nickName, space: ${_roomData['space']}, player2: ${_roomData['player2']}');
       notifyListeners();
       return;
     }
