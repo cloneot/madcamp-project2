@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:madcamp_project2/screens/create_room_screen.dart';
 import 'package:madcamp_project2/screens/user_info_screen.dart';
-import '../resources/socket_methods.dart';
 import 'join_room_screen.dart';
 import 'login_screen.dart';
 
@@ -14,8 +13,6 @@ class MainMenuScreen extends StatefulWidget {
 }
 
 class _MainMenuScreenState extends State<MainMenuScreen> {
-  final SocketMethods _socketMethods = SocketMethods();
-
   void createRoom(BuildContext context) {
     Navigator.pushNamed(context, CreateRoomScreen.routeName);
   }

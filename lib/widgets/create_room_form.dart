@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:madcamp_project2/provider/user_data_provider.dart';
 import 'package:madcamp_project2/resources/socket_methods.dart';
+import 'package:provider/provider.dart';
 
 class CreateRoomForm extends StatefulWidget {
   const CreateRoomForm({super.key});
@@ -11,6 +13,7 @@ class CreateRoomForm extends StatefulWidget {
 class _CreateRoomFormState extends State<CreateRoomForm> {
   final _formKey = GlobalKey<FormState>();
   final SocketMethods _socketMethods = SocketMethods();
+  final TextEditingController _nicknameController = TextEditingController();
   String roomName = '';
   String password = '';
   String nickName = '';
@@ -19,6 +22,15 @@ class _CreateRoomFormState extends State<CreateRoomForm> {
   void initState() {
     super.initState();
     _socketMethods.createRoomSuccessListener(context);
+    _nicknameController.text =
+        Provider.of<UserDataProvider>(context, listen: false).username ??
+            'name_error!';
+  }
+
+  @override
+  void dispose() {
+    _nicknameController.dispose();
+    super.dispose();
   }
 
   @override
@@ -46,9 +58,11 @@ class _CreateRoomFormState extends State<CreateRoomForm> {
           ),
           TextFormField(
             maxLength: 20,
-            decoration: const InputDecoration(
-              hintText: "Enter nickname",
-            ),
+            controller: _nicknameController,
+            readOnly: true,
+            // decoration: const InputDecoration(
+            //   hintText: "Enter nickname",
+            // ),
             autovalidateMode: AutovalidateMode.always,
             textInputAction: TextInputAction.done,
             onSaved: (newValue) => nickName = newValue ?? '',
