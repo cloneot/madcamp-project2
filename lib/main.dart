@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:madcamp_project2/provider/room_data_provider.dart';
 import 'package:madcamp_project2/screens/game_waiting_room.dart';
 import 'package:madcamp_project2/screens/login_screen.dart';
 import 'package:madcamp_project2/screens/game_screen.dart';
@@ -6,6 +7,7 @@ import 'package:madcamp_project2/screens/main_menu_screen.dart';
 import 'package:madcamp_project2/screens/create_room_screen.dart';
 import 'package:madcamp_project2/screens/join_room_screen.dart';
 import 'package:madcamp_project2/screens/user_info_screen.dart';
+import 'package:provider/provider.dart';
 import 'package:kakao_flutter_sdk_common/kakao_flutter_sdk_common.dart';
 
 void main() {
@@ -27,8 +29,11 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      routes: {
+    return ChangeNotifierProvider(
+      create: (context) => RoomDataProvider(),
+      child: MaterialApp(
+        title: 'MadCampProject2',
+        routes: {
         LoginScreen.routeName: (context) => const LoginScreen(),
         MainMenuScreen.routeName: (context) => const MainMenuScreen(),
         CreateRoomScreen.routeName: (context) => const CreateRoomScreen(),
@@ -39,6 +44,7 @@ class MyApp extends StatelessWidget {
             const GameWaitingRoomScreen(),
       },
       initialRoute: LoginScreen.routeName,
+      ),
     );
   }
 }
