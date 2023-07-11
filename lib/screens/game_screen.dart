@@ -133,6 +133,7 @@ class _GameScreenState extends State<GameScreen> {
     // socket method member
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -198,10 +199,10 @@ class _GameScreenState extends State<GameScreen> {
                               Text(
                                 'Score: ${player['currentRoundScore']}',
                                 style: const TextStyle(fontSize: 12),
-                              ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
+                       ),
                       ),
                     );
                   }).toList(),
@@ -288,6 +289,9 @@ class _GameScreenState extends State<GameScreen> {
   }
 }
 
+/*
+
+ */
 class Player {
   final String username;
   final int winRoundCount;
