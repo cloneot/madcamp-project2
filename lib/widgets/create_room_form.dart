@@ -24,12 +24,6 @@ class _CreateRoomFormState extends State<CreateRoomForm> {
   }
 
   @override
-  void dispose() {
-    _socketMethods.createRoomSuccessListenerOff();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,

@@ -39,6 +39,7 @@ class SocketMethods {
 
   //잘못된 roomId로 join on (done)
   void wrongRoomIdListener(BuildContext context) {
+    _socketClient.off('wrongRoomId');
     _socketClient.on('wrongRoomId', (msg){
       Fluttertoast.showToast(
           msg: msg,
@@ -54,6 +55,7 @@ class SocketMethods {
 
   //방에 자리가 없음 on
   void noRoomSpaceListener(BuildContext context) {
+    _socketClient.off('noRoomSpace');
     _socketClient.on('noRoomSpace', (msg){
       Fluttertoast.showToast(
           msg: msg,
@@ -69,6 +71,7 @@ class SocketMethods {
 
   //join할 room 정보 on
   void joinThisRoomListener(BuildContext context) {
+    _socketClient.off('joinThisRoom');
     _socketClient.on('joinThisRoom', (room) {
       Provider.of<RoomDataProvider>(context, listen: false).updateRoomData(room);
       Provider.of<RoomDataProvider>(context, listen: false).setMePlayer(room.space);
@@ -79,6 +82,7 @@ class SocketMethods {
 
   //새 참가지 on
   void newPlayerListener(BuildContext context) {
+    _socketClient.off('newPlayer');
     _socketClient.on('newPlayer', (nickName) {
       Provider.of<RoomDataProvider>(context, listen: false).newPlayer(nickName);
     });
@@ -86,6 +90,7 @@ class SocketMethods {
 
   //방 생성 성공 on (done)
   void createRoomSuccessListener(BuildContext context) {
+    _socketClient.off('createRoomSuccess');
     _socketClient.on('createRoomSuccess', (newRoom) {
       Provider.of<RoomDataProvider>(context, listen: false).updateRoomData(newRoom);
       Fluttertoast.showToast(
@@ -102,12 +107,9 @@ class SocketMethods {
     });
   }
 
-  void createRoomSuccessListenerOff() {
-    _socketClient.off('createRoomSuccess');
-  }
-
   //TODO 정답 맞춤 on
   void youWinListener(BuildContext context) {
+    _socketClient.off('youWin');
     _socketClient.on('youWin', (_) {
       Fluttertoast.showToast(
           msg: "YOU WIN!!",
