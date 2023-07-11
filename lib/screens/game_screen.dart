@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:madcamp_project2/provider/room_data_provider.dart';
+import 'package:madcamp_project2/provider/chat_data_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../resources/socket_methods.dart';
@@ -15,6 +16,7 @@ class GameScreen extends StatefulWidget {
 class _GameScreenState extends State<GameScreen> {
   late List<dynamic> players;
   late RoomDataProvider roomDataProvider;
+  late ChatDataProvider chatDataProvider;
   /*
   final List<Player> players = [
     Player(username: 'Player 1', winRoundCount: 2, currentRoundScore: 100),
@@ -23,68 +25,15 @@ class _GameScreenState extends State<GameScreen> {
     Player(username: 'Player 4', winRoundCount: 3, currentRoundScore: 150),
   ];
    */
+  /*
   final List<ChatMessage> chatMessages = [
     ChatMessage(
       message: 'Hello1',
       messageScore: 20,
       sendingPlayer: 'Player 1',
     ),
-    ChatMessage(
-      message: 'Good job!',
-      messageScore: 10,
-      sendingPlayer: 'Player 3',
-    ),
-    ChatMessage(
-      message: 'Thanks!',
-      messageScore: 5,
-      sendingPlayer: 'Player 2',
-    ),
-    ChatMessage(
-      message: 'Hello',
-      messageScore: 20,
-      sendingPlayer: 'Player 1',
-    ),
-    ChatMessage(
-      message: 'Hello',
-      messageScore: 20,
-      sendingPlayer: 'Player 1',
-    ),
-    ChatMessage(
-      message: 'Good job!',
-      messageScore: 10,
-      sendingPlayer: 'Player 3',
-    ),
-    ChatMessage(
-      message: 'Thanks!',
-      messageScore: 5,
-      sendingPlayer: 'Player 2',
-    ),
-    ChatMessage(
-      message: 'Hello',
-      messageScore: 20,
-      sendingPlayer: 'Player 1',
-    ),
-    ChatMessage(
-      message: 'Hello',
-      messageScore: 20,
-      sendingPlayer: 'Player 1',
-    ),
-    ChatMessage(
-      message: 'Good job!',
-      messageScore: 10,
-      sendingPlayer: 'Player 3',
-    ),
-    ChatMessage(
-      message: 'Thanks!',
-      messageScore: 5,
-      sendingPlayer: 'Player 2',
-    ),
-    ChatMessage(
-      message: 'Hello',
-      messageScore: 20,
-      sendingPlayer: 'Player 1',
-    ),
   ];
+   */
   final int timerValue = 120;
   final SocketMethods _socketMethods = SocketMethods();
 
@@ -99,6 +48,7 @@ class _GameScreenState extends State<GameScreen> {
     // socket method init
     _socketMethods.someoneWinListener(context);
     _socketMethods.wrongAnswerListener(context);
+    _socketMethods.roomDataErrorListener(context);
   }
 
   @override
@@ -106,6 +56,7 @@ class _GameScreenState extends State<GameScreen> {
     _chatController.dispose();
     _chatScrollController.dispose();
     _chatFocusNode.dispose();
+    chatDataProvider.clearChatMessage();
     super.dispose();
   }
 
@@ -121,7 +72,10 @@ class _GameScreenState extends State<GameScreen> {
   @override
   Widget build(BuildContext context) {
     roomDataProvider = Provider.of<RoomDataProvider>(context);
+    chatDataProvider = Provider.of<ChatDataProvider>(context, listen: true);
     room = roomDataProvider.roomData;
+    late dynamic chatMessages;
+    chatMessages = chatDataProvider.chatMessages;
     players = [
       {'username': room['owner'], 'winRoundCount': 0, 'currentRoundScore': 0},
       {'username': room['player2'], 'winRoundCount': 0, 'currentRoundScore': 0},
@@ -147,6 +101,10 @@ class _GameScreenState extends State<GameScreen> {
                 ),
                 Text(
                   'Room ID: ${room['id']}',
+                  style: const TextStyle(fontSize: 14),
+                ),
+                Text(
+                  'target: ${room['target']}',
                   style: const TextStyle(fontSize: 14),
                 ),
               ],
@@ -299,17 +257,5 @@ class Player {
     required this.username,
     required this.winRoundCount,
     required this.currentRoundScore,
-  });
-}
-
-class ChatMessage {
-  final String message;
-  final int messageScore;
-  final String sendingPlayer;
-
-  ChatMessage({
-    required this.message,
-    required this.messageScore,
-    required this.sendingPlayer,
   });
 }

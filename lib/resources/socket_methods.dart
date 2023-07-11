@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:madcamp_project2/models/chat_message.dart';
+import 'package:madcamp_project2/provider/chat_data_provider.dart';
 import 'package:madcamp_project2/provider/room_data_provider.dart';
 import 'package:madcamp_project2/resources/socket_client.dart';
 import 'package:madcamp_project2/screens/game_screen.dart';
 import 'package:madcamp_project2/screens/game_waiting_room.dart';
+import 'package:madcamp_project2/screens/main_menu_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
+import 'package:madcamp_project2/models/chat_message.dart';
 import '../provider/room_list_provider.dart';
 import '../screens/join_room_screen.dart';
 
@@ -72,7 +75,7 @@ class SocketMethods {
   void gameStartAllowListener(BuildContext context) {
     _socketClient.off('gameStartAllow');
     _socketClient.on('gameStartAllow', (_) {
-      Navigator.pushNamed(context, GameScreen.routeName);
+      Navigator.popAndPushNamed(context, GameScreen.routeName);
     });
   }
 
@@ -130,7 +133,7 @@ class SocketMethods {
       // Provider.of<RoomDataProvider>(context, listen: false)
       //     .setMePlayer(room.space);
       //TODO 참가자 게임 대기화면으로 바꾸기
-      Navigator.pushNamed(context, GameWaitingRoomScreen.routeName);
+      Navigator.popAndPushNamed(context, GameWaitingRoomScreen.routeName);
     });
   }
 
@@ -146,11 +149,9 @@ class SocketMethods {
   void createRoomSuccessListener(BuildContext context) {
     _socketClient.off('createRoomSuccess');
     _socketClient.on('createRoomSuccess', (newRoom) {
-      Provider.of<RoomDataProvider>(context, listen: false)
-          .updateRoomData(newRoom);
-      // Provider.of<RoomDataProvider>(context, listen: false)
-      //     .setMePlayer(newRoom['space']);
-      Navigator.pushNamed(context, GameWaitingRoomScreen.routeName);
+      Provider.of<RoomDataProvider>(context, listen: false).updateRoomData(newRoom);
+      Provider.of<RoomDataProvider>(context, listen: false).setMePlayer(newRoom['space']);
+      Navigator.popAndPushNamed(context, GameWaitingRoomScreen.routeName);
     });
   }
 
@@ -159,7 +160,7 @@ class SocketMethods {
     _socketClient.off('someoneWin');
     _socketClient.on('someoneWin', (data) {
       Fluttertoast.showToast(
-          msg: "${data['myNickName']} WIN!!",
+          msg: "$data WIN!!",
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIosWeb: 1,
@@ -167,6 +168,8 @@ class SocketMethods {
           textColor: Colors.white,
           fontSize: 16.0);
       //정답 맞춘 뒤 상황 추가
+      Provider.of<ChatDataProvider>(context,listen: false).clearChatMessage();
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const MainMenuScreen()), (route) => false);
     });
   }
 
@@ -174,15 +177,11 @@ class SocketMethods {
   void wrongAnswerListener(BuildContext context) {
     _socketClient.off('wrongAnswer');
     _socketClient.on('wrongAnswer', (data) {
-      Fluttertoast.showToast(
-        msg: "Wrong Answer\nDifference: ${data['difference']}",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0,
-      );
+      Provider.of<ChatDataProvider>(context, listen: false).addChatMessage(ChatMessage(
+        message: data['chat'],
+        messageScore: data['difference'],
+        sendingPlayer: data['myNickName'],
+      ));
     });
   }
 
