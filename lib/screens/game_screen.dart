@@ -51,6 +51,7 @@ class _GameScreenState extends State<GameScreen> {
     _socketMethods.someoneWinListener(context);
     _socketMethods.wrongAnswerListener(context);
     _socketMethods.roomDataErrorListener(context);
+    _socketMethods.timeOverFromServerListener(context);
     onStartRound();
   }
 
