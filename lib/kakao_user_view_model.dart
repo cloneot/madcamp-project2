@@ -8,6 +8,11 @@ class KakaoUserViewModel {
 
   KakaoUserViewModel(this._kakaoLogin);
 
+  // KakaoUserViewModel._internal() {
+  //   await _kakaoLogin = KakaoLogin();
+
+  // }
+
   Future login() async {
     isLogined = await _kakaoLogin.login();
     if (isLogined) {
