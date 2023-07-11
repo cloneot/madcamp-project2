@@ -13,7 +13,6 @@ class GameScreen extends StatefulWidget {
 }
 
 class _GameScreenState extends State<GameScreen> {
-
   late List<dynamic> players;
   late RoomDataProvider roomDataProvider;
   /*
@@ -100,7 +99,6 @@ class _GameScreenState extends State<GameScreen> {
     // socket method init
     _socketMethods.someoneWinListener(context);
     _socketMethods.wrongAnswerListener(context);
-
   }
 
   @override
@@ -199,10 +197,10 @@ class _GameScreenState extends State<GameScreen> {
                               Text(
                                 'Score: ${player['currentRoundScore']}',
                                 style: const TextStyle(fontSize: 12),
-                            ),
-                          ],
+                              ),
+                            ],
+                          ),
                         ),
-                       ),
                       ),
                     );
                   }).toList(),
