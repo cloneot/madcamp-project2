@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:madcamp_project2/models/player.dart';
 
 class RoomDataProvider extends ChangeNotifier {
   /*
@@ -30,22 +28,6 @@ class RoomDataProvider extends ChangeNotifier {
   void setMePlayer(int leftSpace) {
     _mePlayer = 4 - leftSpace;
     notifyListeners();
-  }
-
-  String? myNickName() {
-    if (_mePlayer == 1) {
-      return _roomData['owner'];
-    }
-    if (_mePlayer == 2) {
-      return _roomData['player2'];
-    }
-    if (_mePlayer == 3) {
-      return _roomData['player3'];
-    }
-    if (_mePlayer == 4) {
-      return _roomData['player4'];
-    }
-    return null;
   }
 
   void newPlayer(String nickName) {

@@ -148,8 +148,20 @@ class SocketMethods {
     _socketClient.on('createRoomSuccess', (newRoom) {
       Provider.of<RoomDataProvider>(context, listen: false)
           .updateRoomData(newRoom);
-      // Provider.of<RoomDataProvider>(context, listen: false)
-      //     .setMePlayer(newRoom['space']);
+      Fluttertoast.showToast(
+          msg: newRoom.toString(),
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
+      //TODO 방장 게임 대기화면으로 바꾸기
+      Navigator.popAndPushNamed(context, GameWaitingRoomScreen.routeName);
+      Provider.of<RoomDataProvider>(context, listen: false)
+          .updateRoomData(newRoom);
+      Provider.of<RoomDataProvider>(context, listen: false)
+          .setMePlayer(newRoom['space']);
       Navigator.pushNamed(context, GameWaitingRoomScreen.routeName);
     });
   }
@@ -170,28 +182,6 @@ class SocketMethods {
     });
   }
 
-  //TODO wrongAnswerListener 짜기
-  void wrongAnswerListener(BuildContext context) {
-    _socketClient.off('wrongAnswer');
-    _socketClient.on('wrongAnswer', (data) {
-      Fluttertoast.showToast(
-        msg: "Wrong Answer\nDifference: ${data['difference']}",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0,
-      );
-    });
-  }
-
-  // 방 목록 emit
-  void getRoomList() {
-    print('client: socket_methods: getRoomList: emit');
-    _socketClient.emit('getRoomList');
-  }
-
   // 방 목록 success
   void getRoomListSuccessListener(BuildContext context) {
     _socketClient.off('getRoomListSuccess');
@@ -202,4 +192,21 @@ class SocketMethods {
       Navigator.pushNamed(context, JoinRoomScreen.routeName);
     });
   }
+
+  //TODO wrongAnswerListener 짜기 (optional)
+  /*
+  void wrongAnswerListener(BuildContext context) {
+    _socketClient.on('wrongAnswer', (difference, chat) => {
+      Fluttertoast.showToast(
+          msg: "YOU WIN!!",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0
+      );
+    });
+  }
+   */
 }
