@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:madcamp_project2/provider/room_data_provider.dart';
 import 'package:madcamp_project2/resources/socket_client.dart';
 import 'package:madcamp_project2/screens/game_screen.dart';
+import 'package:madcamp_project2/screens/game_waiting_room.dart';
 import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:socket_io_common/src/util/event_emitter.dart';
 
 class SocketMethods {
   final _socketClient = SocketClient.instance.socket!;
@@ -27,14 +29,65 @@ class SocketMethods {
     }
   }
 
+  //game start request emit
+  void gameStart(String nickName, String roomId) {
+    if(nickName.isNotEmpty && roomId.isNotEmpty) {
+      _socketClient.emit('gameStart', {
+      'nickName': nickName,
+      'roomId': roomId,
+      });
+    }
+  }
+
   //TODO 채팅 내용 emit
-  void enterChat(String chat, dynamic room) {
+  void enterChat(String chat, dynamic room, String? myNickName) {
     if(chat.isNotEmpty) {
       _socketClient.emit('enterChat', {
         'chat': chat,
         'room': room,
+        'myNickName': myNickName,
       });
     }
+  }
+
+  //잘못된 enterChat 방 id or 방 name
+  void roomDataErrorListener(BuildContext context) {
+    _socketClient.off('roomDataError');
+    _socketClient.on('roomDataError',(_) {
+      Fluttertoast.showToast(
+          msg: 'roomDataError',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0
+      );
+    });
+  }
+
+  //게임 시작 허용 (방장)
+  void gameStartAllowListener(BuildContext context) {
+    _socketClient.off('gameStartAllow');
+    _socketClient.on('gameStartAllow', (_) {
+      Navigator.pushNamed(context, GameScreen.routeName);
+    });
+  }
+
+  //게임 시작 reject (참가자)
+  void youAreNotOwnerListener(BuildContext context) {
+    _socketClient.off('youAreNotOwner');
+    _socketClient.on('youAreNotOwner', (_) {
+      Fluttertoast.showToast(
+          msg: '방장이 아닙니다.',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0
+      );
+    });
   }
 
   //잘못된 roomId로 join on (done)
@@ -76,7 +129,7 @@ class SocketMethods {
       Provider.of<RoomDataProvider>(context, listen: false).updateRoomData(room);
       Provider.of<RoomDataProvider>(context, listen: false).setMePlayer(room.space);
       //TODO 참가자 게임 대기화면으로 바꾸기
-      Navigator.pushNamed(context, GameScreen.routeName);
+      Navigator.pushNamed(context, GameWaitingRoomScreen.routeName);
     });
   }
 
@@ -93,26 +146,17 @@ class SocketMethods {
     _socketClient.off('createRoomSuccess');
     _socketClient.on('createRoomSuccess', (newRoom) {
       Provider.of<RoomDataProvider>(context, listen: false).updateRoomData(newRoom);
-      Fluttertoast.showToast(
-          msg: newRoom.toString(),
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0
-      );
-      //TODO 방장 게임 대기화면으로 바꾸기
-      Navigator.pushNamed(context, GameScreen.routeName);
+      Provider.of<RoomDataProvider>(context, listen: false).setMePlayer(newRoom['space']);
+      Navigator.pushNamed(context, GameWaitingRoomScreen.routeName);
     });
   }
 
   //TODO 정답 맞춤 on
-  void youWinListener(BuildContext context) {
-    _socketClient.off('youWin');
-    _socketClient.on('youWin', (_) {
+  void someoneWinListener(BuildContext context) {
+    _socketClient.off('someoneWin');
+    _socketClient.on('someoneWin', (data) {
       Fluttertoast.showToast(
-          msg: "YOU WIN!!",
+          msg: "${data['myNickName']} WIN!!",
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIosWeb: 1,
@@ -124,21 +168,20 @@ class SocketMethods {
     });
   }
 
-  //TODO wrongAnswerListener 짜기 (optional)
-  /*
+  //TODO wrongAnswerListener 짜기
   void wrongAnswerListener(BuildContext context) {
-    _socketClient.on('wrongAnswer', (difference, chat) => {
+    _socketClient.off('wrongAnswer');
+    _socketClient.on('wrongAnswer', (data) {
       Fluttertoast.showToast(
-          msg: "YOU WIN!!",
+          msg: "Wrong Answer\nDifference: ${data['difference']}",
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIosWeb: 1,
           backgroundColor: Colors.red,
           textColor: Colors.white,
-          fontSize: 16.0
+          fontSize: 16.0,
       );
     });
   }
-   */
 
 }

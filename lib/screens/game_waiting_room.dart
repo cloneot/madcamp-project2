@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../provider/room_data_provider.dart';
+import '../resources/socket_methods.dart';
 
 class Player {
   int userId;
@@ -24,12 +28,13 @@ class GameWaitingRoomScreen extends StatefulWidget {
   const GameWaitingRoomScreen({Key? key}) : super(key: key);
 
   @override
-  _GameWaitingRoomScreenState createState() => _GameWaitingRoomScreenState();
+  State<GameWaitingRoomScreen> createState() => _GameWaitingRoomScreenState();
 }
 
 class _GameWaitingRoomScreenState extends State<GameWaitingRoomScreen> {
-  int roomId = 12345; // Room ID 변수
-  String roomName = 'Game Room'; // Room Name 변수
+  final SocketMethods _socketMethods = SocketMethods();
+  late List<dynamic> players;
+  /*
   final List<Player> players = [
     Player(
       userId: 1,
@@ -64,10 +69,15 @@ class _GameWaitingRoomScreenState extends State<GameWaitingRoomScreen> {
       draws: 1,
     ),
   ];
+   */
 
   @override
   void initState() {
     super.initState();
+    _socketMethods.newPlayerListener(context);
+    _socketMethods.gameStartAllowListener(context);
+    _socketMethods.youAreNotOwnerListener(context);
+
     // channel.stream.listen((message) {
     //   // WebSocket 메시지 수신
     //   // 메시지를 파싱하여 플레이어 정보 업데이트
@@ -85,17 +95,25 @@ class _GameWaitingRoomScreenState extends State<GameWaitingRoomScreen> {
 
   @override
   Widget build(BuildContext context) {
+    RoomDataProvider roomDataProvider = Provider.of<RoomDataProvider>(context);
+    dynamic room = roomDataProvider.roomData;
+    players = [
+      {'username': room['owner'], 'wins': 0, 'draws': 0, 'loses': 0},
+      {'username': room['player2'], 'wins': 0, 'draws': 0, 'loses': 0},
+      {'username': room['player3'], 'wins': 0, 'draws': 0, 'loses': 0},
+      {'username': room['player4'], 'wins': 0, 'draws': 0, 'loses': 0},
+    ];
     return Scaffold(
       appBar: AppBar(
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Room ID: $roomId',
+              'Room ID: ${room['id']}',
               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ), // Room ID 텍스트
             Text(
-              'Room Name: $roomName',
+              'Room Name: ${room['name']}',
               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ), // Room Name 텍스트
           ],
@@ -124,7 +142,7 @@ class _GameWaitingRoomScreenState extends State<GameWaitingRoomScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            player.username,
+                            player['username'],
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 16.0,
@@ -132,17 +150,17 @@ class _GameWaitingRoomScreenState extends State<GameWaitingRoomScreen> {
                           ),
                           const SizedBox(height: 8.0),
                           Text(
-                            'Wins: ${player.wins}',
+                            'Wins: ${player['wins']}',
                             style: const TextStyle(fontSize: 14.0),
                           ),
                           const SizedBox(height: 2.0),
                           Text(
-                            'Draws: ${player.draws}',
+                            'Draws: ${player['draws']}',
                             style: const TextStyle(fontSize: 14.0),
                           ),
                           const SizedBox(height: 2.0),
                           Text(
-                            'Loses: ${player.loses}',
+                            'Loses: ${player['loses']}',
                             style: const TextStyle(fontSize: 14.0),
                           ),
                         ],
@@ -156,6 +174,19 @@ class _GameWaitingRoomScreenState extends State<GameWaitingRoomScreen> {
             ElevatedButton(
               onPressed: () {
                 // 게임 시작 버튼 클릭 시 동작
+                if(roomDataProvider.mePlayer==1){
+                  _socketMethods.gameStart(room['owner'], room['id']);
+                }
+                else if(roomDataProvider.mePlayer==2) {
+                  _socketMethods.gameStart(room['player2'], room['id']);
+                }
+                else if(roomDataProvider.mePlayer==3) {
+                  _socketMethods.gameStart(room['player3'], room['id']);
+                }
+                else if(roomDataProvider.mePlayer==4) {
+                  _socketMethods.gameStart(room['player4'], room['id']);
+                }
+
               },
               child: const Padding(
                 padding: EdgeInsets.all(16.0),
