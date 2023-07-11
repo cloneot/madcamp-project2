@@ -34,42 +34,6 @@ class GameWaitingRoomScreen extends StatefulWidget {
 class _GameWaitingRoomScreenState extends State<GameWaitingRoomScreen> {
   final SocketMethods _socketMethods = SocketMethods();
   late List<dynamic> players;
-  /*
-  final List<Player> players = [
-    Player(
-      userId: 1,
-      username: "Player 1",
-      totalGames: 10,
-      wins: 5,
-      loses: 3,
-      draws: 2,
-    ),
-    Player(
-      userId: 2,
-      username: "Player 2",
-      totalGames: 8,
-      wins: 4,
-      loses: 2,
-      draws: 2,
-    ),
-    Player(
-      userId: 3,
-      username: "Player 3",
-      totalGames: 6,
-      wins: 3,
-      loses: 2,
-      draws: 1,
-    ),
-    Player(
-      userId: 4,
-      username: "Player 4",
-      totalGames: 12,
-      wins: 7,
-      loses: 4,
-      draws: 1,
-    ),
-  ];
-   */
 
   @override
   void initState() {
@@ -87,6 +51,7 @@ class _GameWaitingRoomScreenState extends State<GameWaitingRoomScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print('game waiting room screen build');
     RoomDataProvider roomDataProvider = Provider.of<RoomDataProvider>(context);
     dynamic room = roomDataProvider.roomData;
     players = [

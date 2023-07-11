@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:madcamp_project2/provider/room_data_provider.dart';
 import 'package:madcamp_project2/provider/chat_data_provider.dart';
@@ -17,30 +19,30 @@ class _GameScreenState extends State<GameScreen> {
   late List<dynamic> players;
   late RoomDataProvider roomDataProvider;
   late ChatDataProvider chatDataProvider;
-  /*
-  final List<Player> players = [
-    Player(username: 'Player 1', winRoundCount: 2, currentRoundScore: 100),
-    Player(username: 'Player 2', winRoundCount: 1, currentRoundScore: 50),
-    Player(username: 'Player 3', winRoundCount: 0, currentRoundScore: 0),
-    Player(username: 'Player 4', winRoundCount: 3, currentRoundScore: 150),
-  ];
-   */
-  /*
-  final List<ChatMessage> chatMessages = [
-    ChatMessage(
-      message: 'Hello1',
-      messageScore: 20,
-      sendingPlayer: 'Player 1',
-    ),
-  ];
-   */
-  final int timerValue = 120;
+
+  int totalSeconds = 60;
+  late Timer timer;
   final SocketMethods _socketMethods = SocketMethods();
 
   final TextEditingController _chatController = TextEditingController();
   final ScrollController _chatScrollController = ScrollController();
   final FocusNode _chatFocusNode = FocusNode();
   late dynamic room;
+
+  void onTick(Timer timer) {
+    setState(() {
+      totalSeconds = totalSeconds - 1;
+      if (totalSeconds == 0) {
+        timer.cancel();
+        // TODO: 게임 종료
+        print('game_screen 게임 종료');
+      }
+    });
+  }
+
+  void onStartRound() {
+    timer = Timer.periodic(const Duration(seconds: 1), onTick);
+  }
 
   @override
   void initState() {
@@ -49,6 +51,7 @@ class _GameScreenState extends State<GameScreen> {
     _socketMethods.someoneWinListener(context);
     _socketMethods.wrongAnswerListener(context);
     _socketMethods.roomDataErrorListener(context);
+    onStartRound();
   }
 
   @override
@@ -110,7 +113,7 @@ class _GameScreenState extends State<GameScreen> {
               ],
             ),
             Text(
-              'Timer: $timerValue seconds',
+              'Timer: $totalSeconds seconds',
               style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
@@ -223,15 +226,19 @@ class _GameScreenState extends State<GameScreen> {
                           child: TextField(
                             controller: _chatController,
                             focusNode: _chatFocusNode,
+                            textInputAction: TextInputAction.done,
                             decoration: const InputDecoration(
                               hintText: 'Type a message...',
                             ),
+                            onSubmitted: (value) {
+                              _sendMessage();
+                            },
                           ),
                         ),
-                        IconButton(
-                          icon: const Icon(Icons.send),
-                          onPressed: _sendMessage,
-                        ),
+                        // IconButton(
+                        //   icon: const Icon(Icons.send),
+                        //   onPressed: _sendMessage,
+                        // ),
                       ],
                     ),
                   ],

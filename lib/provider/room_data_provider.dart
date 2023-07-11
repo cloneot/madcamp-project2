@@ -47,21 +47,22 @@ class RoomDataProvider extends ChangeNotifier {
   }
 
   void newPlayer(String nickName) {
-    if (_roomData.space == 3) {
-      _roomData.player2 == nickName;
-      _roomData.place--;
+    print('room_data_provider newPlayer() space: ${_roomData['space']}');
+    if (_roomData['space'] == 3) {
+      _roomData['player2'] = nickName;
+      _roomData['space']--;
       notifyListeners();
       return;
     }
-    if (_roomData.space == 2) {
-      _roomData.player3 == nickName;
-      _roomData.place--;
+    if (_roomData['space'] == 2) {
+      _roomData['player3'] = nickName;
+      _roomData['space']--;
       notifyListeners();
       return;
     }
-    if (_roomData.space == 1) {
-      _roomData.player4 == nickName;
-      _roomData.place--;
+    if (_roomData['space'] == 1) {
+      _roomData['player4'] = nickName;
+      _roomData['space']--;
       notifyListeners();
       return;
     }
