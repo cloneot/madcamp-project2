@@ -72,6 +72,21 @@ class SocketMethods {
     });
   }
 
+  //존재하지 않는 영어단어
+  void noSuchWordListener(BuildContext context) {
+    _socketClient.off('noSuchWord');
+    _socketClient.on('noSuchWord',(data) {
+      Fluttertoast.showToast(
+          msg: '$data는 없는 단어입니다.',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    });
+  }
+
   //게임 시작 허용 (방장)
   void gameStartAllowListener(BuildContext context) {
     _socketClient.off('gameStartAllow');
