@@ -22,7 +22,6 @@ class RoomDataProvider extends ChangeNotifier {
   Player? get player4 => _player4;
    */
 
-
   void updateRoomData(dynamic data) {
     _roomData = data;
     notifyListeners();

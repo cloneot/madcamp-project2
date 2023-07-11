@@ -12,7 +12,7 @@ class SocketMethods {
 
   //방 생성 emit (done)
   void createRoom(String roomName, String nickName) {
-    if(roomName.isNotEmpty) {
+    if(roomName.isNotEmpty && nickName.isNotEmpty) {
       _socketClient.emit('createRoom', {'roomName': roomName, 'nickName': nickName});
     }
   }
@@ -100,6 +100,10 @@ class SocketMethods {
       //TODO 방장 게임 대기화면으로 바꾸기
       Navigator.pushNamed(context, GameScreen.routeName);
     });
+  }
+
+  void createRoomSuccessListenerOff() {
+    _socketClient.off('createRoomSuccess');
   }
 
   //TODO 정답 맞춤 on

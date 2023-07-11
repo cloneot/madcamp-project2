@@ -4,7 +4,6 @@ import 'package:madcamp_project2/screens/game_screen.dart';
 import 'package:madcamp_project2/screens/game_waiting_room.dart';
 import 'package:madcamp_project2/screens/join_room_screen.dart';
 import 'package:madcamp_project2/screens/user_info_screen.dart';
-
 import 'login_screen.dart';
 
 class MainMenuScreen extends StatelessWidget {

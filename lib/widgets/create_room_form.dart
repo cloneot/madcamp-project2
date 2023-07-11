@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:madcamp_project2/resources/socket_methods.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 
 class CreateRoomForm extends StatefulWidget {
   const CreateRoomForm({super.key});
@@ -11,7 +12,7 @@ class CreateRoomForm extends StatefulWidget {
 
 class _CreateRoomFormState extends State<CreateRoomForm> {
   final _formKey = GlobalKey<FormState>();
-  final SocketMethods _socketMethods = SocketMethods();
+  final  SocketMethods _socketMethods = SocketMethods();
   String roomName = '';
   String password = '';
   String nickName = '';
@@ -20,6 +21,12 @@ class _CreateRoomFormState extends State<CreateRoomForm> {
   void initState() {
     super.initState();
     _socketMethods.createRoomSuccessListener(context);
+  }
+
+  @override
+  void dispose() {
+    _socketMethods.createRoomSuccessListenerOff();
+    super.dispose();
   }
 
   @override
@@ -44,15 +51,6 @@ class _CreateRoomFormState extends State<CreateRoomForm> {
               return null;
             },
             onSaved: (newValue) => roomName = newValue ?? '',
-          ),
-          TextFormField(
-            maxLength: 20,
-            decoration: const InputDecoration(
-              hintText: "Enter room password",
-            ),
-            autovalidateMode: AutovalidateMode.always,
-            textInputAction: TextInputAction.done,
-            onSaved: (newValue) => password = newValue ?? '',
           ),
           TextFormField(
             maxLength: 20,
