@@ -111,7 +111,7 @@ class _GameScreenState extends State<GameScreen> {
 
   @override
   Widget build(BuildContext context) {
-    RoomDataProvider roomDataProvider = Provider.of<RoomDataProvider>(context, listen: false);
+    RoomDataProvider roomDataProvider = Provider.of<RoomDataProvider>(context);
     final dynamic room = roomDataProvider.roomData;
     // socket method member
     return Scaffold(
