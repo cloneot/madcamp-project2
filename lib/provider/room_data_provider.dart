@@ -12,8 +12,12 @@ class RoomDataProvider extends ChangeNotifier {
   //roomId, roomName, owner
   dynamic _roomData;
   int? _mePlayer;
+  bool? _isWaitingRoom;
+  bool? _isExplodeByOwner;
   Timer? timer;
 
+  bool? get isExplodeByOwner => _isExplodeByOwner;
+  bool? get isWaitingRoom => _isWaitingRoom;
   int? get mePlayer => _mePlayer;
   dynamic get roomData => _roomData;
   // Timer get timer => _timer!;
@@ -23,10 +27,21 @@ class RoomDataProvider extends ChangeNotifier {
   Player? get player3 => _player3;
   Player? get player4 => _player4;
    */
+  void setIsWaitingRoom(b) {
+    _isWaitingRoom = b;
+  }
+
+  void setIsExplodeByOwner(b) {
+    _isExplodeByOwner = b;
+  }
 
   void updateRoomData(dynamic data) {
     _roomData = data;
     notifyListeners();
+  }
+
+  void clearRoomData() {
+    _roomData = null;
   }
 
   void setMePlayer(int leftSpace) {
@@ -52,22 +67,20 @@ class RoomDataProvider extends ChangeNotifier {
 
   void newPlayer(String nickName) {
     print('room_data_provider newPlayer() space: ${_roomData['space']}');
-    if (_roomData['space'] == 3) {
-      _roomData['player2'] = nickName;
-      _roomData['space']--;
-      print(
-          'newPlayer nickName: $nickName, space: ${_roomData['space']}, player2: ${_roomData['player2']}');
-      notifyListeners();
-      return;
-    }
-    if (_roomData['space'] == 2) {
-      _roomData['player3'] = nickName;
+    if(_roomData['player2']==''){
+      _roomData['player2']=nickName;
       _roomData['space']--;
       notifyListeners();
       return;
     }
-    if (_roomData['space'] == 1) {
-      _roomData['player4'] = nickName;
+    if(_roomData['player3']==''){
+      _roomData['player3']=nickName;
+      _roomData['space']--;
+      notifyListeners();
+      return;
+    }
+    if(_roomData['player4']==''){
+      _roomData['player4']=nickName;
       _roomData['space']--;
       notifyListeners();
       return;

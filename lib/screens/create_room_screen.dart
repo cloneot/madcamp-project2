@@ -18,9 +18,9 @@ class _CreateRoomScreenState extends State<CreateRoomScreen> {
   }
 
   @override
-  void dispose() {
+  void deactivate(){
     _nameController.dispose();
-    super.dispose();
+    super.deactivate();
   }
 
   @override

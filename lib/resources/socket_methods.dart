@@ -58,6 +58,21 @@ class SocketMethods {
     }
   }
 
+  //참가자가 대기화면 나감
+  void playerLeaveWaitingRoom(BuildContext context) {
+    _socketClient.emit ('playerLeaveWaitingRoom', {
+      'room': Provider.of<RoomDataProvider>(context, listen: false).roomData,
+      'mePlayer': Provider.of<RoomDataProvider>(context, listen: false).mePlayer,
+    });
+    Provider.of<RoomDataProvider>(context, listen: false).clearRoomData();
+  }
+
+  //방장이 대기화면 나감
+  void ownerLeaveWaitingRoom(BuildContext context) {
+    _socketClient.emit('ownerLeaveWaitingRoom', Provider.of<RoomDataProvider>(context, listen: false).roomData);
+    Provider.of<RoomDataProvider>(context, listen: false).clearRoomData();
+  }
+
   //잘못된 enterChat 방 id or 방 name
   void roomDataErrorListener(BuildContext context) {
     _socketClient.off('roomDataError');
@@ -85,6 +100,15 @@ class SocketMethods {
           backgroundColor: Colors.red,
           textColor: Colors.white,
           fontSize: 16.0);
+    });
+  }
+
+  //참가자 대기화면 나감 from server
+  void playerLeaveWaitingRoomFromServerListener(BuildContext context) {
+    _socketClient.off('playerLeaveWaitingRoomFromServer');
+    _socketClient.on('playerLeaveWaitingRoomFromServer', (room) {
+      Provider.of<RoomDataProvider>(context, listen: false).updateRoomData(room);
+      Provider.of<RoomDataProvider>(context, listen: false).setMePlayer(room.space);
     });
   }
 
@@ -141,6 +165,20 @@ class SocketMethods {
     });
   }
 
+  //방장이 대기화면 떠남
+  void waitingRoomExplodeListener(BuildContext context) {
+    _socketClient.off('waitingRoomExplode');
+    _socketClient.on('waitingRoomExplode', (_) {
+      _socketClient.emit('leaveRoom', Provider.of<RoomDataProvider>(context, listen: false).roomData);
+      Provider.of<RoomDataProvider>(context, listen: false).setIsExplodeByOwner(true);
+      Provider.of<RoomDataProvider>(context, listen: false).clearRoomData();
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => const MainMenuScreen()),
+              (route) => false);
+    });
+  }
+
   //join할 room 정보 on
   void joinThisRoomListener(BuildContext context) {
     _socketClient.off('joinThisRoom');
@@ -180,6 +218,8 @@ class SocketMethods {
   void someoneWinListener(BuildContext context) {
     _socketClient.off('someoneWin');
     _socketClient.on('someoneWin', (data) {
+      _socketClient.emit('leaveRoom', Provider.of<RoomDataProvider>(context, listen:  false).roomData);
+      Provider.of<RoomDataProvider>(context, listen: false).clearRoomData();
       Fluttertoast.showToast(
           msg: "$data WIN!!",
           toastLength: Toast.LENGTH_SHORT,
@@ -243,7 +283,8 @@ class SocketMethods {
   void timeOverFromServerListener(BuildContext context) {
     _socketClient.off('timeOverFromServer');
     _socketClient.on('timeOverFromServer', (data) {
-      print('timeOverFromServerListener: ${data['nickName'] ?? 'noNickName'}');
+      _socketClient.emit('leaveRoom', Provider.of<RoomDataProvider>(context, listen:  false).roomData);
+      Provider.of<RoomDataProvider>(context, listen: false).clearRoomData();
       Fluttertoast.showToast(
           msg: "${data['nickName']} is WINNER!!\nScore: ${data['score']}",
           toastLength: Toast.LENGTH_SHORT,
