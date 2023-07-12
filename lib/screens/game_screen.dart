@@ -59,13 +59,13 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   @override
-  void dispose() {
+  void deactivate() {
     timer.cancel();
     _chatController.dispose();
     _chatScrollController.dispose();
     _chatFocusNode.dispose();
     chatDataProvider.clearChatMessage();
-    super.dispose();
+    super.deactivate();
   }
 
   void _sendMessage() {
@@ -81,6 +81,7 @@ class _GameScreenState extends State<GameScreen> {
   Widget build(BuildContext context) {
     roomDataProvider = Provider.of<RoomDataProvider>(context);
     chatDataProvider = Provider.of<ChatDataProvider>(context, listen: true);
+    Provider.of<RoomDataProvider>(context, listen: false).setIsWaitingRoom(false);
     room = roomDataProvider.roomData;
     late dynamic chatMessages;
     chatMessages = chatDataProvider.chatMessages;

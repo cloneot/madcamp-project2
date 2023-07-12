@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 import '../provider/room_data_provider.dart';
@@ -42,12 +43,19 @@ class _GameWaitingRoomScreenState extends State<GameWaitingRoomScreen> {
     _socketMethods.gameStartAllowListener(context);
     _socketMethods.youAreNotOwnerListener(context);
     _socketMethods.timerStartListener(context);
+    _socketMethods.waitingRoomExplodeListener(context);
+    _socketMethods.playerLeaveWaitingRoomFromServerListener(context);
   }
 
   @override
-  void dispose() {
-    // channel.sink.close();
-    super.dispose();
+  void deactivate() {
+    if(Provider.of<RoomDataProvider>(context, listen: false).mePlayer==1 && Provider.of<RoomDataProvider>(context, listen: false).isWaitingRoom!) {
+      _socketMethods.ownerLeaveWaitingRoom(context);
+    }
+    else if(Provider.of<RoomDataProvider>(context, listen: false).isWaitingRoom! && !(Provider.of<RoomDataProvider>(context, listen: false).isExplodeByOwner!)){
+      _socketMethods.playerLeaveWaitingRoom(context);
+    }
+    super.deactivate();
   }
 
   @override
@@ -55,6 +63,8 @@ class _GameWaitingRoomScreenState extends State<GameWaitingRoomScreen> {
     print('game waiting room screen build');
     RoomDataProvider roomDataProvider = Provider.of<RoomDataProvider>(context);
     dynamic room = roomDataProvider.roomData;
+    Provider.of<RoomDataProvider>(context, listen: false).setIsWaitingRoom(true);
+    Provider.of<RoomDataProvider>(context, listen: false).setIsExplodeByOwner(false);
     players = [
       {'username': room['owner'], 'wins': 0, 'draws': 0, 'loses': 0},
       {'username': room['player2'], 'wins': 0, 'draws': 0, 'loses': 0},
