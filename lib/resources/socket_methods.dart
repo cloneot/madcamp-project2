@@ -120,6 +120,7 @@ class SocketMethods {
   void gameStartAllowListener(BuildContext context) {
     _socketClient.off('gameStartAllow');
     _socketClient.on('gameStartAllow', (_) {
+      Provider.of<RoomDataProvider>(context, listen: false).setIsStart(1);
       Navigator.pushNamed(context, GameScreen.routeName);
     });
   }
