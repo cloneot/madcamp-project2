@@ -58,12 +58,17 @@ class UserDataProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void updateDescription(String description) {
-    if (_userid != -1) {
-      const JsonCodec json = JsonCodec();
-      final dynamic data = json.encode({'description': description});
-      HttpUtil().put('/users/$_userid/description', data: data);
+  Future<bool> updateDescription(String description) async {
+    try {
+      if (_userid != -1) {
+        const JsonCodec json = JsonCodec();
+        final dynamic data = json.encode({'description': description});
+        await HttpUtil().put('/users/$_userid/description', data: data);
+      }
+      notifyListeners();
+      return true;
+    } catch (err) {
+      return false;
     }
-    notifyListeners();
   }
 }

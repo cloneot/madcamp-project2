@@ -77,7 +77,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         loading = false;
                       });
                     },
-                    child: const Text('로그인'),
+                    child: const Text('카카오 로그인'),
                   ),
                   // TextButton(
                   //   onPressed: () async {
