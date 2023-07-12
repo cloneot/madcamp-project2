@@ -76,7 +76,7 @@ class SocketMethods {
   //존재하지 않는 영어단어
   void noSuchWordListener(BuildContext context) {
     _socketClient.off('noSuchWord');
-    _socketClient.on('noSuchWord',(data) {
+    _socketClient.on('noSuchWord', (data) {
       Fluttertoast.showToast(
           msg: '$data는 없는 단어입니다.',
           toastLength: Toast.LENGTH_SHORT,
@@ -225,12 +225,16 @@ class SocketMethods {
           .updateRoomList(roomList);
     });
   }
+
   //타이머 시작 on
   void timerStartListener(BuildContext context) {
     _socketClient.off('timerStart');
     _socketClient.on('timerStart', (_) {
-        timer = Timer(const Duration(seconds: 10), () {
-        _socketClient.emit('timeOver', Provider.of<RoomDataProvider>(context, listen: false).roomData);
+      timer?.cancel();
+      Provider.of<RoomDataProvider>(context, listen: false).timer =
+          Timer(const Duration(seconds: 11), () {
+        _socketClient.emit('timeOver',
+            Provider.of<RoomDataProvider>(context, listen: false).roomData);
       });
     });
   }

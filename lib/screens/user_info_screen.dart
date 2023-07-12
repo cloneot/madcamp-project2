@@ -3,6 +3,7 @@ import 'package:madcamp_project2/provider/user_data_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../kakao_user_view_model.dart';
+import '../models/histories.dart';
 import '../models/users.dart';
 import '../utils/http_utils.dart';
 import '../utils/kakao_login.dart';
@@ -19,6 +20,7 @@ class _UsreInfoScreenState extends State<UsreInfoScreen> {
   final kakaoUserViewModel = KakaoUserViewModel(KakaoLogin());
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
+  late List<Histories> histories;
 
   @override
   void initState() {
@@ -29,8 +31,13 @@ class _UsreInfoScreenState extends State<UsreInfoScreen> {
   Future<Users> fetchData() async {
     int userid = (await kakaoUserViewModel.getUser()).id;
     Users user = Users.fromMap((await HttpUtil().get('/users/$userid')));
+    String username = user.username;
     usernameController.text = user.username;
     descriptionController.text = user.description;
+    histories = (await HttpUtil().get('/users/$username/histories'))
+        .map((historyJson) => Histories.fromMap(historyJson))
+        .toList()
+        .cast<Histories>();
     return user;
   }
 
@@ -83,27 +90,54 @@ class _UsreInfoScreenState extends State<UsreInfoScreen> {
           Text(
               '${Provider.of<UserDataProvider>(context, listen: true).wins}승 / ${Provider.of<UserDataProvider>(context, listen: true).totalGames}판'),
           ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 // print(
                 //     '${usernameController.text}, ${descriptionController.text}');
                 Provider.of<UserDataProvider>(context, listen: false)
                     .updateDescription(descriptionController.text);
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content: Center(
+                    child: Text('유저 소개 저장 성공'),
+                  ),
+                  duration: Duration(milliseconds: 1000),
+                ));
               },
               child: const Text('저장')),
-          TextButton(
-            onPressed: () {
-              Provider.of<UserDataProvider>(context, listen: false)
-                  .gameEnd(true);
+          const SizedBox(height: 50),
+          Expanded(
+              child: ListView.separated(
+            itemCount: histories.length,
+            itemBuilder: (BuildContext context, int index) {
+              return Row(
+                children: [
+                  Expanded(child: Text(histories[index].owner)),
+                  Expanded(child: Text(histories[index].player2)),
+                  Expanded(child: Text(histories[index].player3)),
+                  Expanded(child: Text(histories[index].player4)),
+                  Expanded(
+                      child:
+                          Text('winnerIndex: ${histories[index].winnerIndex}')),
+                ],
+              );
             },
-            child: const Text('승리 테스트'),
-          ),
-          TextButton(
-            onPressed: () {
-              Provider.of<UserDataProvider>(context, listen: false)
-                  .gameEnd(false);
+            separatorBuilder: (context, index) {
+              return const Divider(height: 10, color: Colors.blue);
             },
-            child: const Text('패배 테스트'),
-          ),
+          )),
+          // TextButton(
+          //   onPressed: () {
+          //     Provider.of<UserDataProvider>(context, listen: false)
+          //         .gameEnd(true);
+          //   },
+          //   child: const Text('승리 테스트'),
+          // ),
+          // TextButton(
+          //   onPressed: () {
+          //     Provider.of<UserDataProvider>(context, listen: false)
+          //         .gameEnd(false);
+          //   },
+          //   child: const Text('패배 테스트'),
+          // ),
         ],
       ),
     );
