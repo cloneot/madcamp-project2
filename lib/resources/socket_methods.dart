@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:madcamp_project2/models/chat_message.dart';
 import 'package:madcamp_project2/provider/chat_data_provider.dart';
 import 'package:madcamp_project2/provider/room_data_provider.dart';
+import 'package:madcamp_project2/provider/user_data_provider.dart';
 import 'package:madcamp_project2/resources/socket_client.dart';
 import 'package:madcamp_project2/screens/game_screen.dart';
 import 'package:madcamp_project2/screens/game_waiting_room.dart';
@@ -238,6 +239,12 @@ class SocketMethods {
           fontSize: 16.0);
 
       //정답 맞춘 뒤 상황 추가
+      print(
+          'winner: $data, me: ${Provider.of<UserDataProvider>(context, listen: false).username}}');
+      String me =
+          Provider.of<UserDataProvider>(context, listen: false).username!;
+      Provider.of<UserDataProvider>(context, listen: false)
+          .gameEnd((data == me));
       Provider.of<ChatDataProvider>(context, listen: false).clearChatMessage();
       Navigator.pushAndRemoveUntil(
           context,
@@ -280,7 +287,7 @@ class SocketMethods {
     _socketClient.on('timerStart', (_) {
       timer?.cancel();
       Provider.of<RoomDataProvider>(context, listen: false).timer =
-          Timer(const Duration(seconds: 11), () {
+          Timer(const Duration(seconds: 31), () {
         _socketClient.emit('timeOver',
             Provider.of<RoomDataProvider>(context, listen: false).roomData);
       });
@@ -302,6 +309,11 @@ class SocketMethods {
           backgroundColor: Colors.red,
           textColor: Colors.white,
           fontSize: 16.0);
+
+      String me =
+          Provider.of<UserDataProvider>(context, listen: false).username!;
+      Provider.of<UserDataProvider>(context, listen: false)
+          .gameEnd((data == me));
       Provider.of<ChatDataProvider>(context, listen: false).clearChatMessage();
       Navigator.pushAndRemoveUntil(
           context,
