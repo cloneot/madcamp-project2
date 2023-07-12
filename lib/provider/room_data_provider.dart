@@ -29,6 +29,9 @@ class RoomDataProvider extends ChangeNotifier {
   Player? get player3 => _player3;
   Player? get player4 => _player4;
    */
+  void setIsStart(n) {
+    _roomData['isStart'] = n;
+  }
   void setIsWaitingRoom(b) {
     _isWaitingRoom = b;
   }

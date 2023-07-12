@@ -9,7 +9,7 @@ class RoomListProvider extends ChangeNotifier {
 
   void updateRoomList(List<dynamic> list) {
     print('client: room_list_provider: updateRoomList: $list');
-    _roomList = list;
+    _roomList = list.where((e) => e['isStart'] == 0).toList();
     notifyListeners();
   }
 
