@@ -47,20 +47,22 @@ class RoomDataProvider extends ChangeNotifier {
   }
 
   void setMePlayer(BuildContext context) {
-    String? myNickName = Provider.of<UserDataProvider>(context, listen: false).username;
-    if(_roomData.owner == myNickName){
+    print('room_data_provier SetMePlayer');
+    String? myNickName =
+        Provider.of<UserDataProvider>(context, listen: false).username;
+    if (_roomData['owner'] == myNickName) {
       _mePlayer = 1;
       return;
     }
-    if(_roomData.player2 == myNickName){
+    if (_roomData['player2'] == myNickName) {
       _mePlayer = 2;
       return;
     }
-    if(_roomData.player3 == myNickName){
+    if (_roomData['player3'] == myNickName) {
       _mePlayer = 3;
       return;
     }
-    if(_roomData.player4 == myNickName){
+    if (_roomData['player4'] == myNickName) {
       _mePlayer = 4;
       return;
     }
@@ -86,20 +88,20 @@ class RoomDataProvider extends ChangeNotifier {
 
   void newPlayer(String nickName) {
     print('room_data_provider newPlayer() space: ${_roomData['space']}');
-    if(_roomData['player2']==''){
-      _roomData['player2']=nickName;
+    if (_roomData['player2'] == '') {
+      _roomData['player2'] = nickName;
       _roomData['space']--;
       notifyListeners();
       return;
     }
-    if(_roomData['player3']==''){
-      _roomData['player3']=nickName;
+    if (_roomData['player3'] == '') {
+      _roomData['player3'] = nickName;
       _roomData['space']--;
       notifyListeners();
       return;
     }
-    if(_roomData['player4']==''){
-      _roomData['player4']=nickName;
+    if (_roomData['player4'] == '') {
+      _roomData['player4'] = nickName;
       _roomData['space']--;
       notifyListeners();
       return;

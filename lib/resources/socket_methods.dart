@@ -60,6 +60,7 @@ class SocketMethods {
 
   //참가자가 대기화면 나감
   void playerLeaveWaitingRoom(BuildContext context) {
+    Provider.of<RoomDataProvider>(context, listen: false).setMePlayer(context);
     _socketClient.emit('playerLeaveWaitingRoom', {
       'room': Provider.of<RoomDataProvider>(context, listen: false).roomData,
       'mePlayer':
@@ -110,8 +111,8 @@ class SocketMethods {
     _socketClient.off('playerLeaveWaitingRoomFromServer');
     _socketClient.on('playerLeaveWaitingRoomFromServer', (room) {
       print('playerLeaveWaitingRoomFromServerListener: $room');
-      // Provider.of<RoomDataProvider>(context, listen: false).setMePlayer(room.space);
-      Provider.of<RoomDataProvider>(context, listen: false).updateRoomData(room);
+      Provider.of<RoomDataProvider>(context, listen: false)
+          .updateRoomData(room);
     });
   }
 
