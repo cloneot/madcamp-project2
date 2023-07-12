@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:madcamp_project2/provider/user_data_provider.dart';
+import 'package:provider/provider.dart';
 
 class RoomDataProvider extends ChangeNotifier {
   /*
@@ -44,11 +46,27 @@ class RoomDataProvider extends ChangeNotifier {
     _roomData = null;
   }
 
-  void setMePlayer(int leftSpace) {
-    _mePlayer = 4 - leftSpace;
-    notifyListeners();
+  void setMePlayer(BuildContext context) {
+    String? myNickName = Provider.of<UserDataProvider>(context, listen: false).username;
+    if(_roomData.owner == myNickName){
+      _mePlayer = 1;
+      return;
+    }
+    if(_roomData.player2 == myNickName){
+      _mePlayer = 2;
+      return;
+    }
+    if(_roomData.player3 == myNickName){
+      _mePlayer = 3;
+      return;
+    }
+    if(_roomData.player4 == myNickName){
+      _mePlayer = 4;
+      return;
+    }
   }
 
+  /*
   String? myNickName() {
     if (_mePlayer == 1) {
       return _roomData['owner'];
@@ -64,6 +82,7 @@ class RoomDataProvider extends ChangeNotifier {
     }
     return null;
   }
+   */
 
   void newPlayer(String nickName) {
     print('room_data_provider newPlayer() space: ${_roomData['space']}');

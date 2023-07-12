@@ -108,7 +108,6 @@ class SocketMethods {
     _socketClient.off('playerLeaveWaitingRoomFromServer');
     _socketClient.on('playerLeaveWaitingRoomFromServer', (room) {
       Provider.of<RoomDataProvider>(context, listen: false).updateRoomData(room);
-      Provider.of<RoomDataProvider>(context, listen: false).setMePlayer(room.space);
     });
   }
 
@@ -187,7 +186,7 @@ class SocketMethods {
           .updateRoomData(room);
       print('joinThisRoom listener: space: ${room['space']}');
       Provider.of<RoomDataProvider>(context, listen: false)
-          .setMePlayer(room['space']);
+          .setMePlayer(context);
       //TODO 참가자 게임 대기화면으로 바꾸기
       Navigator.pushNamed(context, GameWaitingRoomScreen.routeName);
     });
@@ -209,7 +208,7 @@ class SocketMethods {
       Provider.of<RoomDataProvider>(context, listen: false)
           .updateRoomData(newRoom);
       Provider.of<RoomDataProvider>(context, listen: false)
-          .setMePlayer(newRoom['space']);
+          .setMePlayer(context);
       Navigator.popAndPushNamed(context, GameWaitingRoomScreen.routeName);
     });
   }

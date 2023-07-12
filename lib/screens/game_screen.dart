@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:madcamp_project2/provider/room_data_provider.dart';
 import 'package:madcamp_project2/provider/chat_data_provider.dart';
+import 'package:madcamp_project2/provider/user_data_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../resources/socket_methods.dart';
@@ -74,7 +75,7 @@ class _GameScreenState extends State<GameScreen> {
     String message = _chatController.text.trim();
     if (message.isNotEmpty) {
       // Process the sent message, e.g., send it to the server
-      _socketMethods.enterChat(message, room, roomDataProvider.myNickName());
+      _socketMethods.enterChat(message, room, Provider.of<UserDataProvider>(context, listen: false).username);
       _chatController.clear();
     }
   }
