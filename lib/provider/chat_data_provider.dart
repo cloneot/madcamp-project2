@@ -7,6 +7,8 @@ class ChatDataProvider extends ChangeNotifier {
   List<ChatMessage> get chatMessages => _chatMessages;
 
   void addChatMessage(ChatMessage chat) {
+    print(
+        'addChatMessage: ${chat.message} ${chat.messageScore} ${chat.sendingPlayer}');
     _chatMessages.add(chat);
     notifyListeners();
   }

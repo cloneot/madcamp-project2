@@ -18,6 +18,7 @@ class UserDataProvider extends ChangeNotifier {
   String? get username => _username;
   int? get wins => _wins;
   int? get totalGames => _totalGames;
+  bool get isGuest => _userid == -1;
 
   void fetchData() async {
     if ((await KakaoLogin().login())) {
@@ -34,7 +35,7 @@ class UserDataProvider extends ChangeNotifier {
   }
 
   void setGuest() {
-    int rnd = 1000 + Random().nextInt(10000);
+    int rnd = 1000 + Random().nextInt(9000);
     _userid = -1;
     _username = 'guest$rnd';
     _wins = 0;
