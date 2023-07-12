@@ -61,6 +61,8 @@ class _GameScreenState extends State<GameScreen> {
   @override
   void deactivate() {
     timer.cancel();
+    Provider.of<RoomDataProvider>(context, listen: false).timer?.cancel();
+    print('game_screen dispose timer canceled');
     _chatController.dispose();
     _chatScrollController.dispose();
     _chatFocusNode.dispose();

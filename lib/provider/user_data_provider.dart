@@ -13,12 +13,14 @@ class UserDataProvider extends ChangeNotifier {
   String? _username;
   int? _totalGames;
   int? _wins;
+  String? _description;
 
   int? get userid => _userid;
   String? get username => _username;
   int? get wins => _wins;
   int? get totalGames => _totalGames;
   bool get isGuest => _userid == -1;
+  String get description => _description ?? 'default description';
 
   void fetchData() async {
     if ((await KakaoLogin().login())) {
@@ -54,5 +56,19 @@ class UserDataProvider extends ChangeNotifier {
       HttpUtil().put('/users/$_userid/game_end', data: data);
     }
     notifyListeners();
+  }
+
+  Future<bool> updateDescription(String description) async {
+    try {
+      if (_userid != -1) {
+        const JsonCodec json = JsonCodec();
+        final dynamic data = json.encode({'description': description});
+        await HttpUtil().put('/users/$_userid/description', data: data);
+      }
+      notifyListeners();
+      return true;
+    } catch (err) {
+      return false;
+    }
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 class RoomDataProvider extends ChangeNotifier {
@@ -12,11 +14,13 @@ class RoomDataProvider extends ChangeNotifier {
   int? _mePlayer;
   bool? _isWaitingRoom;
   bool? _isExplodeByOwner;
+  Timer? timer;
 
   bool? get isExplodeByOwner => _isExplodeByOwner;
   bool? get isWaitingRoom => _isWaitingRoom;
   int? get mePlayer => _mePlayer;
   dynamic get roomData => _roomData;
+  // Timer get timer => _timer!;
   /*
   Player? get player1 => _player1;
   Player? get player2 => _player2;
