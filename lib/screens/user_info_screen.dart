@@ -108,16 +108,89 @@ class _UsreInfoScreenState extends State<UsreInfoScreen> {
               child: ListView.separated(
             itemCount: histories.length,
             itemBuilder: (BuildContext context, int index) {
-              return Row(
-                children: [
-                  Expanded(child: Text(histories[index].owner)),
-                  Expanded(child: Text(histories[index].player2)),
-                  Expanded(child: Text(histories[index].player3)),
-                  Expanded(child: Text(histories[index].player4)),
-                  Expanded(
-                      child:
-                          Text('winnerIndex: ${histories[index].winnerIndex}')),
-                ],
+              return Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(2),
+                  border: Border.all(
+                      color: const Color.fromARGB(255, 105, 159, 204)),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            histories[index].owner,
+                            style: TextStyle(
+                              fontWeight: histories[index].owner ==
+                                      Provider.of<UserDataProvider>(context,
+                                              listen: false)
+                                          .username
+                                  ? FontWeight.bold
+                                  : FontWeight.normal,
+                              backgroundColor: histories[index].winnerIndex == 0
+                                  ? const Color.fromARGB(255, 201, 226, 86)
+                                  : Colors.white,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Text(
+                            histories[index]
+                                .player2, // Replaced owner with player2
+                            style: TextStyle(
+                              fontWeight: histories[index].player2 ==
+                                      Provider.of<UserDataProvider>(context,
+                                              listen: false)
+                                          .username
+                                  ? FontWeight.bold
+                                  : FontWeight.normal,
+                              backgroundColor: histories[index].winnerIndex == 1
+                                  ? const Color.fromARGB(255, 201, 226, 86)
+                                  : Colors.white,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Text(
+                            histories[index]
+                                .player3, // Replaced owner with player3
+                            style: TextStyle(
+                              fontWeight: histories[index].player3 ==
+                                      Provider.of<UserDataProvider>(context,
+                                              listen: false)
+                                          .username
+                                  ? FontWeight.bold
+                                  : FontWeight.normal,
+                              backgroundColor: histories[index].winnerIndex == 2
+                                  ? const Color.fromARGB(255, 201, 226, 86)
+                                  : Colors.white,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Text(
+                            histories[index]
+                                .player4, // Replaced owner with player4
+                            style: TextStyle(
+                              fontWeight: histories[index].player4 ==
+                                      Provider.of<UserDataProvider>(context,
+                                              listen: false)
+                                          .username
+                                  ? FontWeight.bold
+                                  : FontWeight.normal,
+                              backgroundColor: histories[index].winnerIndex == 3
+                                  ? const Color.fromARGB(255, 201, 226, 86)
+                                  : Colors.white,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               );
             },
             separatorBuilder: (context, index) {
