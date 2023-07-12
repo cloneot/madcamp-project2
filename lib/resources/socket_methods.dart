@@ -60,16 +60,18 @@ class SocketMethods {
 
   //참가자가 대기화면 나감
   void playerLeaveWaitingRoom(BuildContext context) {
-    _socketClient.emit ('playerLeaveWaitingRoom', {
+    _socketClient.emit('playerLeaveWaitingRoom', {
       'room': Provider.of<RoomDataProvider>(context, listen: false).roomData,
-      'mePlayer': Provider.of<RoomDataProvider>(context, listen: false).mePlayer,
+      'mePlayer':
+          Provider.of<RoomDataProvider>(context, listen: false).mePlayer,
     });
     Provider.of<RoomDataProvider>(context, listen: false).clearRoomData();
   }
 
   //방장이 대기화면 나감
   void ownerLeaveWaitingRoom(BuildContext context) {
-    _socketClient.emit('ownerLeaveWaitingRoom', Provider.of<RoomDataProvider>(context, listen: false).roomData);
+    _socketClient.emit('ownerLeaveWaitingRoom',
+        Provider.of<RoomDataProvider>(context, listen: false).roomData);
     Provider.of<RoomDataProvider>(context, listen: false).clearRoomData();
   }
 
@@ -107,8 +109,10 @@ class SocketMethods {
   void playerLeaveWaitingRoomFromServerListener(BuildContext context) {
     _socketClient.off('playerLeaveWaitingRoomFromServer');
     _socketClient.on('playerLeaveWaitingRoomFromServer', (room) {
-      Provider.of<RoomDataProvider>(context, listen: false).updateRoomData(room);
-      Provider.of<RoomDataProvider>(context, listen: false).setMePlayer(room.space);
+      print('playerLeaveWaitingRoomFromServerListener: $room');
+      Provider.of<RoomDataProvider>(context, listen: false)
+          .updateRoomData(room);
+      // Provider.of<RoomDataProvider>(context, listen: false).setMePlayer(room.space);
     });
   }
 
@@ -169,13 +173,15 @@ class SocketMethods {
   void waitingRoomExplodeListener(BuildContext context) {
     _socketClient.off('waitingRoomExplode');
     _socketClient.on('waitingRoomExplode', (_) {
-      _socketClient.emit('leaveRoom', Provider.of<RoomDataProvider>(context, listen: false).roomData);
-      Provider.of<RoomDataProvider>(context, listen: false).setIsExplodeByOwner(true);
+      _socketClient.emit('leaveRoom',
+          Provider.of<RoomDataProvider>(context, listen: false).roomData);
+      Provider.of<RoomDataProvider>(context, listen: false)
+          .setIsExplodeByOwner(true);
       Provider.of<RoomDataProvider>(context, listen: false).clearRoomData();
       Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => const MainMenuScreen()),
-              (route) => false);
+          (route) => false);
     });
   }
 
@@ -218,7 +224,8 @@ class SocketMethods {
   void someoneWinListener(BuildContext context) {
     _socketClient.off('someoneWin');
     _socketClient.on('someoneWin', (data) {
-      _socketClient.emit('leaveRoom', Provider.of<RoomDataProvider>(context, listen:  false).roomData);
+      _socketClient.emit('leaveRoom',
+          Provider.of<RoomDataProvider>(context, listen: false).roomData);
       Provider.of<RoomDataProvider>(context, listen: false).clearRoomData();
       Fluttertoast.showToast(
           msg: "$data WIN!!",
@@ -283,7 +290,8 @@ class SocketMethods {
   void timeOverFromServerListener(BuildContext context) {
     _socketClient.off('timeOverFromServer');
     _socketClient.on('timeOverFromServer', (data) {
-      _socketClient.emit('leaveRoom', Provider.of<RoomDataProvider>(context, listen:  false).roomData);
+      _socketClient.emit('leaveRoom',
+          Provider.of<RoomDataProvider>(context, listen: false).roomData);
       Provider.of<RoomDataProvider>(context, listen: false).clearRoomData();
       Fluttertoast.showToast(
           msg: "${data['nickName']} is WINNER!!\nScore: ${data['score']}",
