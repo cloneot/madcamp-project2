@@ -61,7 +61,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                 content: Center(
-                                  child: Text('로그인 되었습니다'),
+                                  child: Text('카카오 로그인 성공'),
                                 ),
                                 duration: Duration(milliseconds: 1000),
                               ),
@@ -79,39 +79,39 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                     child: const Text('로그인'),
                   ),
+                  // TextButton(
+                  //   onPressed: () async {
+                  //     setState(() {
+                  //       loading = true;
+                  //     });
+                  //     await kakaoUserViewModel.logout();
+                  //     ScaffoldMessenger.of(context).showSnackBar(
+                  //       const SnackBar(
+                  //         content: Center(child: Text('로그아웃 성공.')),
+                  //         duration: Duration(milliseconds: 1000),
+                  //       ),
+                  //     );
+                  //     setState(() {
+                  //       loading = false;
+                  //     });
+                  //   },
+                  //   child: const Text('로그아웃'),
+                  // ),
                   TextButton(
-                    onPressed: () async {
-                      setState(() {
-                        loading = true;
-                      });
-                      await kakaoUserViewModel.logout();
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Center(child: Text('로그아웃 되었습니다.')),
-                          duration: Duration(milliseconds: 1000),
-                        ),
-                      );
-                      setState(() {
-                        loading = false;
-                      });
-                    },
-                    child: const Text('로그아웃'),
-                  ),
-                  IconButton(
                     onPressed: () {
                       Provider.of<UserDataProvider>(context, listen: false)
                           .setGuest();
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Center(
-                            child: Text('게스트 로그인 하셨습니다'),
+                            child: Text('게스트 로그인 성공'),
                           ),
                           duration: Duration(milliseconds: 1000),
                         ),
                       );
                       Navigator.pushNamed(context, MainMenuScreen.routeName);
                     },
-                    icon: const Icon(Icons.arrow_circle_right_outlined),
+                    child: const Text('게스트 로그인'),
                   ),
                 ],
               ),

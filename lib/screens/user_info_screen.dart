@@ -63,7 +63,7 @@ class _UsreInfoScreenState extends State<UsreInfoScreen> {
                       );
                     } else {
                       // 작업이 완료된 경우 데이터를 기반으로 화면을 구성하는 위젯 반환
-                      return buildContent(snapshot.data!);
+                      return buildContent();
                     }
                   }
                 },
@@ -72,7 +72,7 @@ class _UsreInfoScreenState extends State<UsreInfoScreen> {
           );
   }
 
-  Widget buildContent(Users user) {
+  Widget buildContent() {
     return Padding(
       padding: const EdgeInsets.all(18.0),
       child: Column(
@@ -80,7 +80,6 @@ class _UsreInfoScreenState extends State<UsreInfoScreen> {
           const SizedBox(height: 100),
           TextField(controller: usernameController),
           TextField(controller: descriptionController),
-          Text('${user.wins}승'),
           Text(
               '${Provider.of<UserDataProvider>(context, listen: true).wins}승 / ${Provider.of<UserDataProvider>(context, listen: true).totalGames}판'),
           ElevatedButton(

@@ -49,6 +49,7 @@ class SocketMethods {
   //TODO 채팅 내용 emit
   void enterChat(String chat, dynamic room, String? myNickName) {
     if (chat.isNotEmpty) {
+      print('client: enterChat emit myNickName: $myNickName');
       _socketClient.emit('enterChat', {
         'chat': chat,
         'room': room,
@@ -76,7 +77,7 @@ class SocketMethods {
   void gameStartAllowListener(BuildContext context) {
     _socketClient.off('gameStartAllow');
     _socketClient.on('gameStartAllow', (_) {
-      timer = Timer(const Duration(seconds: 60), () {
+      timer = Timer(const Duration(seconds: 10), () {
         _socketClient.emit('timeOver',
             Provider.of<RoomDataProvider>(context, listen: false).roomData);
       });
@@ -236,6 +237,7 @@ class SocketMethods {
   void timeOverFromServerListener(BuildContext context) {
     _socketClient.off('timeOverFromServer');
     _socketClient.on('timeOverFromServer', (data) {
+      print('timeOverFromServerListener: ${data['nickName'] ?? 'noNickName'}');
       Fluttertoast.showToast(
           msg: "${data['nickName']} is WINNER!!\nScore: ${data['score']}",
           toastLength: Toast.LENGTH_SHORT,

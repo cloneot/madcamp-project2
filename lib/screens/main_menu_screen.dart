@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:madcamp_project2/screens/create_room_screen.dart';
 import 'package:madcamp_project2/screens/user_info_screen.dart';
+import 'package:provider/provider.dart';
+import '../kakao_user_view_model.dart';
+import '../provider/user_data_provider.dart';
+import '../utils/kakao_login.dart';
 import 'join_room_screen.dart';
 import 'login_screen.dart';
 
@@ -13,6 +17,9 @@ class MainMenuScreen extends StatefulWidget {
 }
 
 class _MainMenuScreenState extends State<MainMenuScreen> {
+  bool loading = false;
+  final kakaoUserViewModel = KakaoUserViewModel(KakaoLogin());
+
   void createRoom(BuildContext context) {
     Navigator.pushNamed(context, CreateRoomScreen.routeName);
   }
@@ -55,8 +62,21 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
               icon: const Icon(Icons.person_outline),
             ),
             IconButton(
-              onPressed: () =>
-                  Navigator.pushNamed(context, LoginScreen.routeName),
+              onPressed: () async {
+                setState(() => loading = true);
+                if (!Provider.of<UserDataProvider>(context, listen: false)
+                    .isGuest) {
+                  await kakaoUserViewModel.logout();
+                }
+                setState(() => loading = false);
+                Navigator.popAndPushNamed(context, LoginScreen.routeName);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Center(child: Text('로그아웃 성공')),
+                    duration: Duration(milliseconds: 1000),
+                  ),
+                );
+              },
               icon: const Icon(Icons.logout),
             ),
             // IconButton(

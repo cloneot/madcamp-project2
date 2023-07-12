@@ -110,16 +110,6 @@ class _GameWaitingRoomScreenState extends State<GameWaitingRoomScreen> {
                             'Wins: ${player['wins']}',
                             style: const TextStyle(fontSize: 14.0),
                           ),
-                          const SizedBox(height: 2.0),
-                          Text(
-                            'Draws: ${player['draws']}',
-                            style: const TextStyle(fontSize: 14.0),
-                          ),
-                          const SizedBox(height: 2.0),
-                          Text(
-                            'Loses: ${player['loses']}',
-                            style: const TextStyle(fontSize: 14.0),
-                          ),
                         ],
                       ),
                     ),

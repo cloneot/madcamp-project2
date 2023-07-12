@@ -20,7 +20,7 @@ class _GameScreenState extends State<GameScreen> {
   late RoomDataProvider roomDataProvider;
   late ChatDataProvider chatDataProvider;
 
-  int totalSeconds = 60;
+  late int totalSeconds;
   late Timer timer;
   final SocketMethods _socketMethods = SocketMethods();
 
@@ -30,17 +30,18 @@ class _GameScreenState extends State<GameScreen> {
   late dynamic room;
 
   void onTick(Timer timer) {
-    setState(() {
-      totalSeconds = totalSeconds - 1;
-      if (totalSeconds == 0) {
-        timer.cancel();
-        // TODO: 게임 종료
-        print('game_screen 게임 종료');
-      }
-    });
+    if (totalSeconds > 0) {
+      setState(() {
+        totalSeconds = totalSeconds - 1;
+        if (totalSeconds == 0) {
+          timer.cancel();
+        }
+      });
+    }
   }
 
   void onStartRound() {
+    totalSeconds = 10;
     timer = Timer.periodic(const Duration(seconds: 1), onTick);
   }
 
@@ -58,11 +59,11 @@ class _GameScreenState extends State<GameScreen> {
 
   @override
   void dispose() {
+    timer.cancel();
     _chatController.dispose();
     _chatScrollController.dispose();
     _chatFocusNode.dispose();
     chatDataProvider.clearChatMessage();
-    timer.cancel();
     super.dispose();
   }
 
