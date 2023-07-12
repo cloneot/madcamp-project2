@@ -53,6 +53,7 @@ class _GameScreenState extends State<GameScreen> {
     _socketMethods.wrongAnswerListener(context);
     _socketMethods.roomDataErrorListener(context);
     _socketMethods.timeOverFromServerListener(context);
+    _socketMethods.noSuchWordListener(context);
     _chatFocusNode = FocusNode();
     onStartRound();
   }

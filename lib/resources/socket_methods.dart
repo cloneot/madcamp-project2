@@ -92,11 +92,7 @@ class SocketMethods {
   void gameStartAllowListener(BuildContext context) {
     _socketClient.off('gameStartAllow');
     _socketClient.on('gameStartAllow', (_) {
-      timer = Timer(const Duration(seconds: 10), () {
-        _socketClient.emit('timeOver',
-            Provider.of<RoomDataProvider>(context, listen: false).roomData);
-      });
-      Navigator.popAndPushNamed(context, GameScreen.routeName);
+      Navigator.pushNamed(context, GameScreen.routeName);
     });
   }
 
@@ -192,6 +188,7 @@ class SocketMethods {
           backgroundColor: Colors.red,
           textColor: Colors.white,
           fontSize: 16.0);
+
       //정답 맞춘 뒤 상황 추가
       Provider.of<ChatDataProvider>(context, listen: false).clearChatMessage();
       Navigator.pushAndRemoveUntil(
@@ -228,25 +225,15 @@ class SocketMethods {
           .updateRoomList(roomList);
     });
   }
-/*
   //타이머 시작 on
   void timerStartListener(BuildContext context) {
     _socketClient.off('timerStart');
     _socketClient.on('timerStart', (_) {
-      Fluttertoast.showToast(
-          msg: "TIME OVER!!",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0);
-      timer = Timer(const Duration(seconds: 10), () {
+        timer = Timer(const Duration(seconds: 10), () {
         _socketClient.emit('timeOver', Provider.of<RoomDataProvider>(context, listen: false).roomData);
       });
     });
   }
- */
 
   //게임 시간 종료 on
   void timeOverFromServerListener(BuildContext context) {

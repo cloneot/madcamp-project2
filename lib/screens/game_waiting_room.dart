@@ -41,6 +41,7 @@ class _GameWaitingRoomScreenState extends State<GameWaitingRoomScreen> {
     _socketMethods.newPlayerListener(context);
     _socketMethods.gameStartAllowListener(context);
     _socketMethods.youAreNotOwnerListener(context);
+    _socketMethods.timerStartListener(context);
   }
 
   @override
