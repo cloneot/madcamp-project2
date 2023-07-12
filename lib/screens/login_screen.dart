@@ -66,7 +66,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 duration: Duration(milliseconds: 1000),
                               ),
                             );
-                            Navigator.pushNamed(
+                            Navigator.popAndPushNamed(
                                 context, MainMenuScreen.routeName);
                           }
                         } catch (e) {

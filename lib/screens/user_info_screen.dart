@@ -78,14 +78,16 @@ class _UsreInfoScreenState extends State<UsreInfoScreen> {
       child: Column(
         children: [
           const SizedBox(height: 100),
-          TextField(controller: usernameController),
+          TextField(controller: usernameController, readOnly: true),
           TextField(controller: descriptionController),
           Text(
               '${Provider.of<UserDataProvider>(context, listen: true).wins}승 / ${Provider.of<UserDataProvider>(context, listen: true).totalGames}판'),
           ElevatedButton(
               onPressed: () {
-                print(
-                    '${usernameController.text}, ${descriptionController.text}');
+                // print(
+                //     '${usernameController.text}, ${descriptionController.text}');
+                Provider.of<UserDataProvider>(context, listen: false)
+                    .updateDescription(descriptionController.text);
               },
               child: const Text('저장')),
           TextButton(
