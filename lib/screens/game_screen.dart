@@ -84,15 +84,28 @@ class _GameScreenState extends State<GameScreen> {
   Widget build(BuildContext context) {
     roomDataProvider = Provider.of<RoomDataProvider>(context);
     chatDataProvider = Provider.of<ChatDataProvider>(context, listen: true);
-    Provider.of<RoomDataProvider>(context, listen: false).setIsWaitingRoom(false);
+    Provider.of<RoomDataProvider>(context, listen: false)
+        .setIsWaitingRoom(false);
     room = roomDataProvider.roomData;
     late dynamic chatMessages;
     chatMessages = chatDataProvider.chatMessages;
     players = [
       {'username': room['owner'], 'winRoundCount': 0, 'currentRoundScore': 0},
-      {'username': room['player2'], 'winRoundCount': 0, 'currentRoundScore': 0},
-      {'username': room['player3'], 'winRoundCount': 0, 'currentRoundScore': 0},
-      {'username': room['player4'], 'winRoundCount': 0, 'currentRoundScore': 0},
+      {
+        'username': room['player2'] ?? 'no_player2',
+        'winRoundCount': 0,
+        'currentRoundScore': 0
+      },
+      {
+        'username': room['player3'] ?? 'no_player3',
+        'winRoundCount': 0,
+        'currentRoundScore': 0
+      },
+      {
+        'username': room['player4'] ?? 'no_player4',
+        'winRoundCount': 0,
+        'currentRoundScore': 0
+      },
     ];
     // socket method member
     return Scaffold(
