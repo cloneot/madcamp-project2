@@ -9,6 +9,7 @@ class KakaoLogin {
           await UserApi.instance.loginWithKakaoTalk();
           print('카카오톡으로 로그인 성공');
         } catch (err) {
+          print('error: $err');
           print('카카오톡으로 로그인 실패1');
           return false;
         }

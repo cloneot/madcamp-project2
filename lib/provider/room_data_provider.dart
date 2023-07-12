@@ -43,7 +43,9 @@ class RoomDataProvider extends ChangeNotifier {
   }
 
   void clearRoomData() {
-    _roomData = null;
+    // _roomData = null;
+    _roomData['owner'] =
+        _roomData['player2'] = _roomData['player3'] = _roomData['player4'];
   }
 
   void setMePlayer(BuildContext context) {

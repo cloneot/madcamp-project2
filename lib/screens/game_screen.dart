@@ -42,7 +42,7 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   void onStartRound() {
-    totalSeconds = 10;
+    totalSeconds = 30;
     timer = Timer.periodic(const Duration(seconds: 1), onTick);
   }
 
@@ -64,18 +64,24 @@ class _GameScreenState extends State<GameScreen> {
     timer.cancel();
     Provider.of<RoomDataProvider>(context, listen: false).timer?.cancel();
     print('game_screen dispose timer canceled');
+    chatDataProvider.clearChatMessage();
+    super.deactivate();
+  }
+
+  @override
+  void dispose() {
     _chatController.dispose();
     _chatScrollController.dispose();
     _chatFocusNode.dispose();
-    chatDataProvider.clearChatMessage();
-    super.deactivate();
+    super.dispose();
   }
 
   void _sendMessage() {
     String message = _chatController.text.trim();
     if (message.isNotEmpty) {
       // Process the sent message, e.g., send it to the server
-      _socketMethods.enterChat(message, room, Provider.of<UserDataProvider>(context, listen: false).username);
+      _socketMethods.enterChat(message, room,
+          Provider.of<UserDataProvider>(context, listen: false).username);
       _chatController.clear();
     }
   }
@@ -90,7 +96,11 @@ class _GameScreenState extends State<GameScreen> {
     late dynamic chatMessages;
     chatMessages = chatDataProvider.chatMessages;
     players = [
-      {'username': room['owner'], 'winRoundCount': 0, 'currentRoundScore': 0},
+      {
+        'username': room['owner'] ?? '??owner???',
+        'winRoundCount': 0,
+        'currentRoundScore': 0
+      },
       {
         'username': room['player2'] ?? 'no_player2',
         'winRoundCount': 0,
@@ -173,14 +183,14 @@ class _GameScreenState extends State<GameScreen> {
                                 ),
                               ),
                               const SizedBox(height: 4),
-                              Text(
-                                'Win: ${player['winRoundCount']}',
-                                style: const TextStyle(fontSize: 12),
-                              ),
-                              Text(
-                                'Score: ${player['currentRoundScore']}',
-                                style: const TextStyle(fontSize: 12),
-                              ),
+                              // Text(
+                              //   'Win: ${player['winRoundCount']}',
+                              //   style: const TextStyle(fontSize: 12),
+                              // ),
+                              // Text(
+                              //   'Score: ${player['currentRoundScore']}',
+                              //   style: const TextStyle(fontSize: 12),
+                              // ),
                             ],
                           ),
                         ),
