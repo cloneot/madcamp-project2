@@ -33,3 +33,8 @@ Score is abs(translated number - target numeber). Smaller score is good.
 Game end when someone find matching word or timeover.
 
 When timeover, user who has the smallest score win.
+
+<img src="/screenshots/kakao_login.jpg" width="30%" alt="Kakao Login"></img>
+<img src="/sreenshots/user_info.jpg" width="30%"  alt="User Info"></img>
+<img src="/screenshots/game_waiting_room.jpg" width="30%" alt="Game Waiting Room"></img>
+<img src="/screenshots/ingame.jpg" width="30%" alt="In Game"></img>
