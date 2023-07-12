@@ -49,6 +49,7 @@ class SocketMethods {
   //TODO 채팅 내용 emit
   void enterChat(String chat, dynamic room, String? myNickName) {
     if (chat.isNotEmpty) {
+      print('client: enterChat emit myNickName: $myNickName');
       _socketClient.emit('enterChat', {
         'chat': chat,
         'room': room,
@@ -146,8 +147,9 @@ class SocketMethods {
     _socketClient.on('joinThisRoom', (room) {
       Provider.of<RoomDataProvider>(context, listen: false)
           .updateRoomData(room);
-      // Provider.of<RoomDataProvider>(context, listen: false)
-      //     .setMePlayer(room.space);
+      print('joinThisRoom listener: space: ${room['space']}');
+      Provider.of<RoomDataProvider>(context, listen: false)
+          .setMePlayer(room['space']);
       //TODO 참가자 게임 대기화면으로 바꾸기
       Navigator.pushNamed(context, GameWaitingRoomScreen.routeName);
     });
@@ -170,7 +172,7 @@ class SocketMethods {
           .updateRoomData(newRoom);
       Provider.of<RoomDataProvider>(context, listen: false)
           .setMePlayer(newRoom['space']);
-      Navigator.pushNamed(context, GameWaitingRoomScreen.routeName);
+      Navigator.popAndPushNamed(context, GameWaitingRoomScreen.routeName);
     });
   }
 
@@ -200,6 +202,7 @@ class SocketMethods {
   void wrongAnswerListener(BuildContext context) {
     _socketClient.off('wrongAnswer');
     _socketClient.on('wrongAnswer', (data) {
+      print('wrongAnswerListener: $data');
       Provider.of<ChatDataProvider>(context, listen: false)
           .addChatMessage(ChatMessage(
         message: data['chat'],
@@ -236,6 +239,7 @@ class SocketMethods {
   void timeOverFromServerListener(BuildContext context) {
     _socketClient.off('timeOverFromServer');
     _socketClient.on('timeOverFromServer', (data) {
+      print('timeOverFromServerListener: ${data['nickName'] ?? 'noNickName'}');
       Fluttertoast.showToast(
           msg: "${data['nickName']} is WINNER!!\nScore: ${data['score']}",
           toastLength: Toast.LENGTH_SHORT,
@@ -248,7 +252,7 @@ class SocketMethods {
       Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => const MainMenuScreen()),
-              (route) => false);
+          (route) => false);
     });
   }
 }

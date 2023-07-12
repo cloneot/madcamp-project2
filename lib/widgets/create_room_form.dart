@@ -42,12 +42,23 @@ class _CreateRoomFormState extends State<CreateRoomForm> {
           const SizedBox(height: 150),
           TextFormField(
             maxLength: 20,
+            controller: _nicknameController,
+            readOnly: true,
+            // decoration: const InputDecoration(
+            //   hintText: "Enter nickname",
+            // ),
+            // autovalidateMode: AutovalidateMode.always,
+            textInputAction: TextInputAction.next,
+            onSaved: (newValue) => nickName = newValue ?? '',
+          ),
+          TextFormField(
+            maxLength: 20,
             decoration: const InputDecoration(
               hintText: "Enter room name",
             ),
             autofocus: true,
-            autovalidateMode: AutovalidateMode.always,
-            textInputAction: TextInputAction.next,
+            // autovalidateMode: AutovalidateMode.always,
+            textInputAction: TextInputAction.done,
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return "required field";
@@ -56,22 +67,13 @@ class _CreateRoomFormState extends State<CreateRoomForm> {
             },
             onSaved: (newValue) => roomName = newValue ?? '',
           ),
-          TextFormField(
-            maxLength: 20,
-            controller: _nicknameController,
-            readOnly: true,
-            // decoration: const InputDecoration(
-            //   hintText: "Enter nickname",
-            // ),
-            autovalidateMode: AutovalidateMode.always,
-            textInputAction: TextInputAction.done,
-            onSaved: (newValue) => nickName = newValue ?? '',
-          ),
           Padding(
             padding: const EdgeInsets.all(20),
             child: ElevatedButton(
               onPressed: () {
+                print('create room button pressed');
                 if (_formKey.currentState!.validate()) {
+                  print('create room button validate success');
                   _formKey.currentState!.save();
                   _socketMethods.createRoom(roomName, nickName);
                 }
